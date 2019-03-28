@@ -1,0 +1,29 @@
+title: Spatial visualization
+theme: visualize
+needs: spatial-basics
+readings: ~
+updated: ~
+desc: "\nSetup\n-----\n\nWe'll start by loading the tidyverse, sf, and read in a couple
+  of sample datasets.\n\n``` r\nlibrary(tidyverse)\nlibrary(sf)\n\nnc <- read_sf(system.file(\"shape/nc.shp\",
+  package = \"sf\"))\nstates <- st_as_sf(maps::map(\"state\", plot = FALSE, fill =
+  TRUE))\n```\n\n`geom_sf()`\n-----------\n\nThe easiest way to get started is to
+  supply an sf object to `geom_sf()`:\n\n``` r\nggplot() +\n  geom_sf(data = nc)\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-2-1.png)\n\nNotice
+  that ggplot2 takes care of setting the aspect ratio correctly.\n\nYou can supply
+  other aesthetics: for polygons, `fill` is most useful:\n\n``` r\nggplot() +\n  geom_sf(aes(fill
+  = AREA), data = nc, color = \"white\")\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-3-1.png)\n\nWhen
+  you include multiple layers, ggplot2 will take care of ensuring that they all have
+  a common coordinate reference system (CRS) so that it makes sense to overlay them.\n\n```
+  r\nggplot() +\n  geom_sf(data = states) + \n  geom_sf(data = nc)\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-4-1.png)\n\nYou
+  can combine `geom_sf()` with other geoms. In this case, `x` and `y` positions are
+  assumed be in the same CRS as the sf object (typically these will be longitude and
+  latitude).\n\n``` r\nggplot() +\n  geom_sf(data = nc) +\n  annotate(geom = \"point\",
+  x = -80, y = 35, color = \"red\", size = 4)\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-5-1.png)\n\n`coord_sf()`\n------------\n\nYou'll
+  need to use `coord_sf()` for two reasons:\n\n-   You want to zoom into a specified
+  region of the plot by using `xlim` and `ylim`\n\n    ``` r\n    ggplot() +\n      geom_sf(data
+  = nc) +\n      annotate(geom = \"point\", x = -80, y = 35, color = \"red\", size
+  = 4) + \n      coord_sf(xlim = c(-81, -79), ylim = c(34, 36))\n    ```\n\n    ![](spatial-vis_files/figure-markdown_github/unnamed-chunk-6-1.png)\n\n-
+  \  You want to override to use a specific projection. If you don't specify the `crs`
+  argument, it just uses the one provided in the first layer. The following example
+  uses an Albers Equal Area projection and the NAD83 datum, with an EPSG code of 102003.\n\n
+  \   ``` r\n    ggplot() +\n      geom_sf(data = states) +\n      coord_sf(crs =
+  st_crs(102003))\n    ```\n\n    ![](spatial-vis_files/figure-markdown_github/unnamed-chunk-7-1.png)\n"

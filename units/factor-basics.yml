@@ -1,0 +1,14 @@
+title: Factor basics
+theme: wrangle
+
+desc: |
+  Factors are similar to strings, but they can be put in any order. This
+  makes them particularly useful for visualization because alphabetical
+  order is rarely the best order.
+
+needs: [string-basics]
+
+readings:
+- book: r4ds-15
+- href: https://github.com/rstudio/cheatsheets/blob/master/factors.pdf
+  text: Factors with forcats
