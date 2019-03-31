@@ -1,6 +1,5 @@
 title: Spreading and gathering
 theme: wrangle
-
 needs: [tidy-data]
 
 desc: |
@@ -18,7 +17,6 @@ desc: |
 
 readings:
 - book: r4ds-12.3
-
 - book: r4ds-12.5
   desc: >
     (explicit vs implicit).

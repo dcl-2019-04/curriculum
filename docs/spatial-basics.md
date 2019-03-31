@@ -5,6 +5,7 @@ title: Spatial basics
 <!-- Generated automatically from spatial-basics.yml. Do not edit by hand -->
 
 # Spatial basics <small class='wrangle'>[wrangle]</small>
+<small>(Builds on: [Manipulation basics](manip-basics.md))</small>  
 <small>(Leads to: [Spatial visualization](spatial-vis.md))</small>
 
 

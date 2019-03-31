@@ -1,5 +1,6 @@
 title: Fitting and visualizing models
 theme: model
+needs: [eda-2d, model-basics]
 
 desc: |
   It is possible to understand some models (particularly popular statistical
@@ -16,8 +17,6 @@ desc: |
   doesn't cover every possible type of model (because not every model makes
   predictions) but it does cover a very wide class, including most models in
   statistics and machine learning.
-
-needs: [eda-2d, model-basics]
 
 readings:
 - book: r4ds-23.3

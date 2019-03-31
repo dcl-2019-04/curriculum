@@ -1,6 +1,8 @@
 title: purrr basics
 theme: program
-needs: function-basics
+needs:
+- function-basics
+- function-anonymous
 readings: ~
 updated: ~
 desc: "\n``` r\nlibrary(tidyverse)\n```\n\nIteration as an assembly line\n-----------------------------\n\nYou'll

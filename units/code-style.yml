@@ -1,5 +1,6 @@
 title: Code style
 theme: communicate
+needs: [setup]
 
 desc: |
   Code style is simultaneously incredibly important and utterly trivial.
@@ -14,8 +15,6 @@ desc: |
   Install styler with `install.packages("styler")` and make sure you can
   locate the RStudio addin command for restyling selected code. This will
   make it very easy to apply the tidyverse style guide automatically.
-
-needs: [setup]
 
 readings:
 - href: https://github.com/dcl-docs/style-guide/blob/master/style-guide.md

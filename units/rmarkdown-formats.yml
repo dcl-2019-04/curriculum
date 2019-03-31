@@ -1,6 +1,5 @@
 title: R Markdown presentations
 theme: communicate
-
 needs: [rmarkdown-basics]
 
 desc: |
@@ -22,7 +21,6 @@ desc: |
     and tables on a single screen.
 
 readings:
-
 - book: r4ds-29.1
 - book: r4ds-29.3
 - book: r4ds-29.5

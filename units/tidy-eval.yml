@@ -84,8 +84,8 @@ desc: "\nIntroduction\n------------\n\nAt some point during the quarter, you may
   here but I showed you `quo()` before. That's because they have slightly different
   uses: `quo()` captures what you, the function writer types, `enquo()` captures what
   the user has typed:\n\n``` r\nfun_1 <- function(x) quo(x)\nfun_1(a + b)\n#> <quosure>\n#>
-  expr: ^x\n#> env:  0x7fc4d9108260\nfun_2 <- function(x) enquo(x)\nfun_2(a + b)\n#>
-  <quosure>\n#> expr: ^a + b\n#> env:  0x7fc4d489f510\n```\n\nAs a rule of thumb,
+  expr: ^x\n#> env:  0x7fe899143ec8\nfun_2 <- function(x) enquo(x)\nfun_2(a + b)\n#>
+  <quosure>\n#> expr: ^a + b\n#> env:  0x7fe8930aa710\n```\n\nAs a rule of thumb,
   use `quo()` when you're experimenting interactively at the console, and `enquo()`
   when you're creating a function.\n\nPassing `...`\n-------------\n\nWhat if you
   want to allow the user to pass in any number of variables to `group_by()`? You might

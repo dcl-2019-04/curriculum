@@ -1,7 +1,7 @@
 ---
 unit_title: "Spatial basics"
 theme: wrangle
-needs: ~
+needs: manip-basics
 ---
 
 ```{r setup, include=FALSE}

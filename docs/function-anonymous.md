@@ -5,7 +5,8 @@ title: Anonymous functions
 <!-- Generated automatically from function-anonymous.yml. Do not edit by hand -->
 
 # Anonymous functions <small class='program'>[program]</small>
-<small>(Builds on: [Function basics](function-basics.md))</small>
+<small>(Builds on: [Function basics](function-basics.md))</small>  
+<small>(Leads to: [purrr basics](purrr-basics.md))</small>
 
 
 Most functions you'll encounter are named. **Named functions** are functions that are assigned to a variable. The variable allows you to call the function wherever you'd like without repeating the original code.

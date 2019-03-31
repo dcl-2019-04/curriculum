@@ -1,5 +1,6 @@
 title: Model basics
 theme: model
+needs: [setup]
 
 desc: |
   This course approaches modeling a little differently to most statistics
@@ -9,8 +10,6 @@ desc: |
 
   In this unit, you'll build up your intuition for what a model does, and what
   it tells you about a dataset.
-
-needs: [setup]
 
 readings:
 - book: r4ds-23.1

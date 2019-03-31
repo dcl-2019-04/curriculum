@@ -1,7 +1,7 @@
 ---
 unit_title: Tidy evaluation
-needs: [manip-scoped, function-basics]
 theme: program
+needs: [manip-scoped, function-basics]
 ---
 
 ```{r setup, include = FALSE}

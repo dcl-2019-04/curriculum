@@ -5,7 +5,7 @@ title: ggplot2 extensions
 <!-- Generated automatically from ggplot2-exts.yml. Do not edit by hand -->
 
 # ggplot2 extensions <small class='visualize'>[visualize]</small>
-
+<small>(Builds on: [Visualization basics](vis-basics.md))</small>
 
 ggplot2 is not an island; it also has a rich ecosystem of extensions that
 solve a wide range of problems that base ggplot2 does not. In this reading

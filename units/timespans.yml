@@ -1,5 +1,6 @@
 title: Time spans
 theme: wrangle
+needs: [datetime-basics]
 
 desc: |
   Dates and date-times (i.e. `POSIXct`) represent a fixed instant in time.
@@ -7,8 +8,6 @@ desc: |
   start doing arithmetic with dates and times. They're surprisingly
   complicated, and in this reading you'll learn about the three data
   structures needed to cover the full range of needs.
-
-needs: [datetime-basics]
 
 readings:
 - book: r4ds-16.4

@@ -1,5 +1,6 @@
 title: Models with multiple variables
 theme: model
+needs: [model-vis]
 
 desc: |
   Models with a single variable can be useful (if you want to remove a single
@@ -11,8 +12,6 @@ desc: |
   models* unit, but it's relevant for this unit as well. Review the chapter, 
   paying attention to the parts that discuss building and interpreting models
   with multiple variables. 
-
-needs: [model-vis]
 
 readings:
 - book: r4ds-23.4

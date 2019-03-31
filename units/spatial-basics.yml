@@ -1,6 +1,6 @@
 title: Spatial basics
 theme: wrangle
-needs: ~
+needs: manip-basics
 readings: ~
 updated: ~
 desc: "\nSpatial packages\n----------------\n\nIn R, there are two main lineages of

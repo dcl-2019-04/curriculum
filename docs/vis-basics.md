@@ -6,7 +6,7 @@ title: Visualization basics
 
 # Visualization basics <small class='visualize'>[visualize]</small>
 <small>(Builds on: [Data basics](data-basics.md))</small>  
-<small>(Leads to: [Exploratory data analysis (1D)](eda-1d.md), [Discrete-continuous relationships](vis-discrete-continuous.md), [Distributions](vis-distributions.md))</small>
+<small>(Leads to: [Exploratory data analysis (1D)](eda-1d.md), [ggplot2 extensions](ggplot2-exts.md), [ggplot2 calls](vis-calls.md), [Discrete-continuous relationships](vis-discrete-continuous.md), [Distributions](vis-distributions.md))</small>
 
 Data visualization is one of the most important tools of data science.
 It's also a great place to start learning a programming language because

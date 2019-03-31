@@ -174,12 +174,12 @@ fun_1 <- function(x) quo(x)
 fun_1(a + b)
 #> <quosure>
 #> expr: ^x
-#> env:  0x7fc4d9108260
+#> env:  0x7fe899143ec8
 fun_2 <- function(x) enquo(x)
 fun_2(a + b)
 #> <quosure>
 #> expr: ^a + b
-#> env:  0x7fc4d489f510
+#> env:  0x7fe8930aa710
 ```
 
 As a rule of thumb, use `quo()` when you're experimenting interactively at the console, and `enquo()` when you're creating a function.

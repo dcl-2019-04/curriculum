@@ -1,7 +1,6 @@
 title: Documentation
 theme: workflow
 needs: [setup]
-updated: 2018-01
 
 desc: |
   R comes with rich built-in documentation that you can access by typing

@@ -1,5 +1,6 @@
 title: Many models
 theme: model
+needs: [model-basics, list-cols]
 
 desc: |
   Instead of using one big, complicated visualisations, it's often better to
@@ -9,8 +10,6 @@ desc: |
 
   In this unit you'll learn how to combine modelr, tidyr, and purrr to
   fit many simple models to a single dataset.
-
-needs: [model-basics, list-cols]
 
 readings:
 - book: r4ds-25.2

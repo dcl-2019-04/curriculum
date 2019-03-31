@@ -1,5 +1,6 @@
 title: Learning more
 theme: workflow
+needs: [getting-help]
 
 desc: |
   In this class, you have mastered the basics of data science in R,
@@ -20,5 +21,3 @@ desc: |
 
       * [tidyverse.org blog](https://www.tidyverse.org/articles/): articles and
         descriptions of new packages releases.
-
-needs: [getting-help]

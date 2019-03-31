@@ -1,7 +1,7 @@
 ---
 unit_title: Other purrr functions
-needs: [purrr-basics]
 theme: program
+needs: [purrr-basics]
 ---
 
 ```{r setup, include = FALSE}
