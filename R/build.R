@@ -101,7 +101,7 @@ build_overview <- function() {
   leads_to <- needs %>% select(name = needs, leads_to = name)
 
   needs_graph <- igraph::graph_from_data_frame(leads_to, vertices = units)
-  set.seed(1014)
+  set.seed(107)
 
   ggraph(needs_graph, layout = "nicely") +
     geom_edge_link(
