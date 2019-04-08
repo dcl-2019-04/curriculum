@@ -1,5 +1,5 @@
 ---
-unit_title: "Other single table verbs"
+unit_title: "Other single-table verbs"
 theme: wrangle
 needs: [manip-basics]
 ---

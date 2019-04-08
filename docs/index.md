@@ -87,7 +87,7 @@ title: Theme index
 <tr>
 <td></td>
   <td colspan="1"></td>
-  <td colspan="6"><a class="wrangle" href="manip-one-table.html">Other single table verbs</a></td>
+  <td colspan="6"><a class="wrangle" href="manip-one-table.html">Other single-table verbs</a></td>
   <td colspan="5"></td>
 </tr>
 <tr>

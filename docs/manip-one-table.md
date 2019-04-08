@@ -1,32 +1,45 @@
 ---
-title: Other single table verbs
+title: Other single-table verbs
 ---
 
 <!-- Generated automatically from manip-one-table.yml. Do not edit by hand -->
 
-# Other single table verbs <small class='wrangle'>[wrangle]</small>
+# Other single-table verbs <small class='wrangle'>[wrangle]</small>
 <small>(Builds on: [Manipulation basics](manip-basics.md))</small>
 
 
-You've learned the most important verbs for data analysis: `filter()`, `mutate()`, `group_by()` and `summarize()`. There are a number of other verbs that are not quite as important but still come in handy from time-to-time. The goal of this document is to familiarise you with their purpose and basic operation
+You’ve learned the most important verbs for data analysis: `filter()`,
+`mutate()`, `group_by()` and `summarize()`. There are a number of other
+verbs that are not quite as important but still come in handy from
+time-to-time. The goal of this document is to familiarise you with their
+purpose and basic operation
 
 ``` r
 library(tidyverse)
 library(nycflights13)
 ```
 
-Select
-------
+## Select
 
-Most of the datasets you'll work with in this class only have a relatively small number of variables, and generally you don't need to reduce further. In real life, you'll sometimes encounter datasets with hundreds or even thousands of variables, and the first challenge is just to narrow down to a useful subset. Solving that problem is the job of `select()`.
+Most of the datasets you’ll work with in this class only have a
+relatively small number of variables, and generally you don’t need to
+reduce further. In real life, you’ll sometimes encounter datasets with
+hundreds or even thousands of variables, and the first challenge is just
+to narrow down to a useful subset. Solving that problem is the job of
+`select()`.
 
-`select()` allows you to work with column names using a handful of helper functions:
+`select()` allows you to work with column names using a handful of
+helper functions:
 
--   `starts_with("x")` and `ends_with("x")` select variables that start with a common prefix or end with a common suffix.
+  - `starts_with("x")` and `ends_with("x")` select variables that start
+    with a common prefix or end with a common suffix.
 
--   `contains("x")` selects variables that contain a phrase. `matches("x.y")` select all variables that match a given regular expression (which you'll learn about later in the course).
+  - `contains("x")` selects variables that contain a phrase.
+    `matches("x.y")` select all variables that match a given regular
+    expression (which you’ll learn about later in the course).
 
--   `a:e` selects all variables from variable `a` to variable `e` inclsive.
+  - `a:e` selects all variables from variable `a` to variable `e`
+    inclsive.
 
 You can also select a single varible just by using its name directly.
 
@@ -49,7 +62,8 @@ flights %>%
 #> # … with 336,766 more rows
 ```
 
-To remove variables from selection, put a `-` in front of the expression.
+To remove variables from selection, put a `-` in front of the
+expression.
 
 ``` r
 flights %>% 
@@ -72,7 +86,8 @@ flights %>%
 #> #   distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
 ```
 
-There's one last helper that's useful if you just want to move a few variables to the start: `everything()`.
+There’s one last helper that’s useful if you just want to move a few
+variables to the start: `everything()`.
 
 ``` r
 flights %>% 
@@ -96,10 +111,11 @@ flights %>%
 #> #   time_hour <dttm>
 ```
 
-Rename
-------
+## Rename
 
-To change the name of a variable use `df %>% rename(new_name = old_name)`. If you have trouble remembering which sides old and new go on, remember it's the same order as `mutate()`.
+To change the name of a variable use `df %>% rename(new_name =
+old_name)`. If you have trouble remembering which sides old and new go
+on, remember it’s the same order as `mutate()`.
 
 ``` r
 flights %>% 
@@ -123,7 +139,8 @@ flights %>%
 #> #   minute <dbl>, time_hour <dttm>
 ```
 
-If you're selecting and renaming, note that you can also use `select()` to rename. This sometimes allows you to save a step.
+If you’re selecting and renaming, note that you can also use `select()`
+to rename. This sometimes allows you to save a step.
 
 ``` r
 flights %>% 
@@ -144,10 +161,11 @@ flights %>%
 #> # … with 336,766 more rows
 ```
 
-Transmute
----------
+## Transmute
 
-Transmute is a minor variation of `mutate()`. The main difference is that it drops any variables that you didn't explicitly mention. It's a useful shortcut for `mutate()` + `select()`.
+Transmute is a minor variation of `mutate()`. The main difference is
+that it drops any variables that you didn’t explicitly mention. It’s a
+useful shortcut for `mutate()` + `select()`.
 
 ``` r
 df <- tibble(x = 1:3, y = 3:1)
@@ -173,10 +191,10 @@ df %>%
 #> 3     4
 ```
 
-Arrange
--------
+## Arrange
 
-`arrange()` lets you change the order of the rows. To put a column in descending order, use `desc()`.
+`arrange()` lets you change the order of the rows. To put a column in
+descending order, use `desc()`.
 
 ``` r
 flights %>% 
@@ -220,10 +238,10 @@ flights %>%
 #> #   minute <dbl>, time_hour <dttm>
 ```
 
-Distinct
---------
+## Distinct
 
-`distinct()` removes duplicates from a dataset. The result is ordered by first occurence in original dataset.
+`distinct()` removes duplicates from a dataset. The result is ordered by
+first occurence in original dataset.
 
 ``` r
 flights %>% 
@@ -244,10 +262,13 @@ flights %>%
 #> # … with 5,715 more rows
 ```
 
-Sample
-------
+## Sample
 
-When working with very large datasets, sometimes it's convenient to reduce to a smaller dataset, just by taking a random sample. That's the job of `sample_n()` and `sample_frac()`. `sample_n()` selects the same number of observations from each group, `sample_frac()` selects the same proportion.
+When working with very large datasets, sometimes it’s convenient to
+reduce to a smaller dataset, just by taking a random sample. That’s the
+job of `sample_n()` and `sample_frac()`. `sample_n()` selects the same
+number of observations from each group, `sample_frac()` selects the same
+proportion.
 
 ``` r
 popular_dest <- 
@@ -262,16 +283,16 @@ popular_dest %>%
 #> # Groups:   dest [58]
 #>     year month   day dep_time sched_dep_time dep_delay arr_time
 #>    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-#>  1  2013     1     3     1414           1415        -1     1648
-#>  2  2013     7    20     1034            930        64     1242
-#>  3  2013     4    19     1419           1410         9     1704
-#>  4  2013     3    28     1059           1100        -1     1317
-#>  5  2013    10     5     1603           1605        -2     1821
-#>  6  2013     5     6     1908           1859         9     2130
-#>  7  2013     2    17     1302           1300         2     1505
-#>  8  2013     4    16     1259           1300        -1     1508
-#>  9  2013    12    27     1756           1800        -4     2025
-#> 10  2013     7    16      619            620        -1      846
+#>  1  2013     8    28     1105           1100         5     1349
+#>  2  2013     4    29      713            720        -7      950
+#>  3  2013    10    12      556            600        -4      758
+#>  4  2013     3    14     1823           1700        83     2034
+#>  5  2013     7     7     1824           1800        24     2119
+#>  6  2013    10    30     1748           1738        10     2001
+#>  7  2013    10    18     2002           1930        32     2223
+#>  8  2013     9    29      625            630        -5      839
+#>  9  2013     1    13     1158           1200        -2     1415
+#> 10  2013     9     3     1320           1215        65     1532
 #> # … with 5,790 more rows, and 12 more variables: sched_arr_time <int>,
 #> #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
 #> #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
@@ -284,26 +305,27 @@ popular_dest %>%
 #> # Groups:   dest [58]
 #>     year month   day dep_time sched_dep_time dep_delay arr_time
 #>    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-#>  1  2013     7     3     2120           1950        90     2337
-#>  2  2013    11    15     1047           1030        17     1316
-#>  3  2013     4    10      802            810        -8     1020
-#>  4  2013    11    30     1411           1415        -4     1619
-#>  5  2013     2    15     1855           1900        -5     2127
-#>  6  2013    12    27     1309           1300         9     1555
-#>  7  2013     8    20     1400           1359         1     1624
-#>  8  2013    12    27      614            615        -1      847
-#>  9  2013     1     2     1721           1659        22     2003
-#> 10  2013     4    24     1404           1410        -6     1628
+#>  1  2013     4    19     1854           1817        37     2131
+#>  2  2013     8    13      600            600         0      851
+#>  3  2013    10    17      553            600        -7      821
+#>  4  2013     8    28     1614           1459        75     1821
+#>  5  2013     7    31     1500           1459         1     1735
+#>  6  2013     6    20     1259           1259         0     1520
+#>  7  2013     6    17      803            759         4     1017
+#>  8  2013    12     3      613            615        -2      848
+#>  9  2013     9    21     1055           1100        -5     1317
+#> 10  2013    12     4      957           1000        -3     1228
 #> # … with 3,195 more rows, and 12 more variables: sched_arr_time <int>,
 #> #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
 #> #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
 #> #   minute <dbl>, time_hour <dttm>
 ```
 
-Slice rows
-----------
+## Slice rows
 
-`slice()` allows to pick rows by position, by group. `head()` and `tail()` just show the first (or last) few rows of the entire data frame.
+`slice()` allows to pick rows by position, by group. `head()` and
+`tail()` just show the first (or last) few rows of the entire data
+frame.
 
 ``` r
 # first flights to each dest
