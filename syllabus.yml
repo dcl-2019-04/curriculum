@@ -1,4 +1,4 @@
-cur-week: 02
+cur-week: 03
 
 weeks:
   week-01:
@@ -22,16 +22,16 @@ weeks:
 
   week-03:
   - relational-basics
-  - vis-scales
-  - parse-basics
   - spread-gather
+  - parse-basics
+  - string-basics
   - function-basics
+  - vis-scales
 
   week-04:
   - function-anonymous
   - purrr-basics
   - eda-2d
-  - string-basics
   - vis-distributions
   - manip-scoped
 

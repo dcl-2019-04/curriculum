@@ -8,8 +8,8 @@ cat_line(cli::rule("Building site", line = 2))
 cat_line(cli::rule("Building units"))
 build_units()
 
-cat_line(cli::rule("Building storyboard"))
-build_storyboard()
+#cat_line(cli::rule("Building storyboard"))
+#build_storyboard()
 
 cat_line(cli::rule("Building overview graph"))
 build_overview()
