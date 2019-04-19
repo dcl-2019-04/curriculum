@@ -1,0 +1,7 @@
+id,title,depth,href
+1,purrr basics,1,https://dcl-prog.stanford.edu/purrr-basics.html
+1.1,Iteration as an assembly line,2,https://dcl-prog.stanford.edu/purrr-basics.html#iteration-as-an-assembly-line
+1.2,The map functions,2,https://dcl-prog.stanford.edu/purrr-basics.html#the-map-functions
+1.2.1,Extra arguments,3,https://dcl-prog.stanford.edu/purrr-basics.html#extra-arguments
+1.2.2,Anonymous functions,3,https://dcl-prog.stanford.edu/purrr-basics.html#anonymous-functions
+1.2.3,Tibbles,3,https://dcl-prog.stanford.edu/purrr-basics.html#tibbles
