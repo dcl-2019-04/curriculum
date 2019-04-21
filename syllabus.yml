@@ -32,6 +32,7 @@ weeks:
   - function-anonymous
   - purrr-basics
   - eda-2d
+  - missing-values
   - vis-distributions
   - manip-scoped
 
@@ -41,7 +42,7 @@ weeks:
   - purrr-mutate
   - model-basics
   - vis-continuous-continuous
-  - missing-values
+  
 
   week-06:
   - regexps
