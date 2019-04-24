@@ -5,7 +5,7 @@ title: purrr map with multiple inputs
 <!-- Generated automatically from purrr-parallel.yml. Do not edit by hand -->
 
 # purrr map with multiple inputs <small class='program'>[program]</small>
-<small>(Builds on: [purrr inside mutate](purrr-mutate.md))</small>
+<small>(Builds on: [purrr in mutate](purrr-mutate.md))</small>
 
 
 In the previous purrr units, you learned how to use the `map()` functions to iterate over a single vector and apply a function to each element. `purrr` also contains functions that can iterate over several vectors in parallel, supplying the first elements of each vector to a given function, then the second, then the third, etc.

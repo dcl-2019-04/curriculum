@@ -5,7 +5,7 @@ title: List-columns
 <!-- Generated automatically from list-cols.yml. Do not edit by hand -->
 
 # List-columns <small class='program'>[program]</small>
-<small>(Builds on: [purrr inside mutate](purrr-mutate.md))</small>  
+<small>(Builds on: [purrr in mutate](purrr-mutate.md))</small>  
 <small>(Leads to: [Many models](model-many.md))</small>
 
 **List-columns** are a powerful way to extend data frames to contain any

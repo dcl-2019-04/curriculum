@@ -12,6 +12,6 @@ title: Anonymous functions
 
 ## Readings
 
-  * [Anonymous functions](https://dcl-prog.stanford.edu/function-anonymous.html) [prog-6]
+  * [Vector functions](https://dcl-prog.stanford.edu/function-vector.html) [prog-6]
 
 
