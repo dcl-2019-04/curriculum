@@ -1,23 +1,38 @@
 id,title,depth,href
 1,Introduction,1,https://dcl-prog.stanford.edu/data-structures.html
-2,Data structure basics,1,https://dcl-prog.stanford.edu/data-structure-basics.html
-3,Introduction,1,https://dcl-prog.stanford.edu/functions.html
-4,Function basics,1,https://dcl-prog.stanford.edu/function-basics.html
-5,Vector functions,1,https://dcl-prog.stanford.edu/function-vector.html
-5.1,Temperature recommendations,2,https://dcl-prog.stanford.edu/function-vector.html#temperature-recommendations
-5.2,Vector functions and mutate(),2,https://dcl-prog.stanford.edu/function-vector.html#vector-functions-and-mutate
-5.3,Vectorizing if-else statements,2,https://dcl-prog.stanford.edu/function-vector.html#vectorizing-if-else-statements
-6,Anonymous functions,1,https://dcl-prog.stanford.edu/function-anonymous.html
-7,Introduction,1,https://dcl-prog.stanford.edu/iteration.html
-8,purrr basics,1,https://dcl-prog.stanford.edu/purrr-basics.html
-8.1,Iteration as an assembly line,2,https://dcl-prog.stanford.edu/purrr-basics.html#iteration-as-an-assembly-line
-8.2,The map functions,2,https://dcl-prog.stanford.edu/purrr-basics.html#the-map-functions
-8.2.1,Extra arguments,3,https://dcl-prog.stanford.edu/purrr-basics.html#extra-arguments
-8.2.2,Anonymous functions,3,https://dcl-prog.stanford.edu/purrr-basics.html#anonymous-functions-1
-8.2.3,Tibbles,3,https://dcl-prog.stanford.edu/purrr-basics.html#tibbles
-9,purrr inside mutate,1,https://dcl-prog.stanford.edu/purrr-mutate.html
-10,purrr map with multiple inputs,1,https://dcl-prog.stanford.edu/purrr-parallel.html
-10.1,map2(),2,https://dcl-prog.stanford.edu/purrr-parallel.html#map2
-10.2,pmap(),2,https://dcl-prog.stanford.edu/purrr-parallel.html#pmap
-10.2.1,Anonymous functions,3,https://dcl-prog.stanford.edu/purrr-parallel.html#anonymous-functions-2
-10.2.2,Named functions,3,https://dcl-prog.stanford.edu/purrr-parallel.html#named-functions
+2,"Vectors, lists, and tibbles",1,https://dcl-prog.stanford.edu/data-structure-basics.html
+2.1,Atomic vectors,2,https://dcl-prog.stanford.edu/data-structure-basics.html#atomic-vectors
+2.1.1,Subsetting,3,https://dcl-prog.stanford.edu/data-structure-basics.html#subsetting
+2.1.2,Augmented vectors,3,https://dcl-prog.stanford.edu/data-structure-basics.html#augmented-vectors
+2.2,Lists,2,https://dcl-prog.stanford.edu/data-structure-basics.html#lists
+2.3,Tibbles,2,https://dcl-prog.stanford.edu/data-structure-basics.html#tibbles
+2.3.1,Dimensions,3,https://dcl-prog.stanford.edu/data-structure-basics.html#dimensions
+2.3.2,Variables,3,https://dcl-prog.stanford.edu/data-structure-basics.html#variables
+3,List columns,1,https://dcl-prog.stanford.edu/list-columns.html
+4,Introduction,1,https://dcl-prog.stanford.edu/functions.html
+5,Function basics,1,https://dcl-prog.stanford.edu/function-basics.html
+6,Vector functions,1,https://dcl-prog.stanford.edu/function-vector.html
+6.1,Temperature recommendations,2,https://dcl-prog.stanford.edu/function-vector.html#temperature-recommendations
+6.2,Vector functions and mutate(),2,https://dcl-prog.stanford.edu/function-vector.html#vector-functions-and-mutate
+6.3,Vectorizing if-else statements,2,https://dcl-prog.stanford.edu/function-vector.html#vectorizing-if-else-statements
+7,Anonymous functions,1,https://dcl-prog.stanford.edu/function-anonymous.html
+8,Predicate functions,1,https://dcl-prog.stanford.edu/function-predicate.html
+9,Introduction,1,https://dcl-prog.stanford.edu/iteration.html
+10,purrr basics,1,https://dcl-prog.stanford.edu/purrr-basics.html
+10.1,Iteration as an assembly line,2,https://dcl-prog.stanford.edu/purrr-basics.html#iteration-as-an-assembly-line
+10.2,The map functions,2,https://dcl-prog.stanford.edu/purrr-basics.html#the-map-functions
+10.2.1,Extra arguments,3,https://dcl-prog.stanford.edu/purrr-basics.html#extra-arguments
+10.2.2,Anonymous functions,3,https://dcl-prog.stanford.edu/purrr-basics.html#anonymous-functions-1
+10.2.3,Tibbles,3,https://dcl-prog.stanford.edu/purrr-basics.html#tibbles-1
+11,purrr inside mutate,1,https://dcl-prog.stanford.edu/purrr-mutate.html
+12,purrr map with multiple inputs,1,https://dcl-prog.stanford.edu/purrr-parallel.html
+12.1,map2(),2,https://dcl-prog.stanford.edu/purrr-parallel.html#map2
+12.2,pmap(),2,https://dcl-prog.stanford.edu/purrr-parallel.html#pmap
+12.2.1,Anonymous functions,3,https://dcl-prog.stanford.edu/purrr-parallel.html#anonymous-functions-2
+12.2.2,Named functions,3,https://dcl-prog.stanford.edu/purrr-parallel.html#named-functions
+13,Other purrr functions,1,https://dcl-prog.stanford.edu/purrr-extras.html
+13.1,map functions that output tibbles,2,https://dcl-prog.stanford.edu/purrr-extras.html#map-functions-that-output-tibbles
+13.1.1,_dfr,3,https://dcl-prog.stanford.edu/purrr-extras.html#dfr
+13.1.2,_dfc,3,https://dcl-prog.stanford.edu/purrr-extras.html#dfc
+13.2,Walk,2,https://dcl-prog.stanford.edu/purrr-extras.html#walk
+13.3,Predicate functions,2,https://dcl-prog.stanford.edu/purrr-extras.html#predicate-functions-1
