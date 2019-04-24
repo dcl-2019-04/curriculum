@@ -8,4 +8,4 @@ desc: |
   can iterate over multiple vectors in parallel.
 
 readings:
-- book: prog-12
+- book: prog-10
