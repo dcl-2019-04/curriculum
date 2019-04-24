@@ -7,8 +7,12 @@ desc: |
   vector. Extracting each element and applying that function would be tedious, 
   create a lot of duplicated code, and be nearly impossible for large lists and 
   vectors. Instead, you can use the functions in the purrr package to iterate over
-  lists and vectors and perform an action at each element. In this unit, you'll 
-  learn about the most basic purrr functions: the map functions. 
+  lists and vectors and perform an action at each element. 
+  
+  In this unit, you'll learn about the most basic purrr functions: the map 
+  functions. You'll also learn about anonymous functions, which will allow you 
+  to create custom functions inside map functions.
 
 readings:
+- book: prog-7
 - book: prog-10
