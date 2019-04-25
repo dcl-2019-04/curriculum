@@ -1,83 +1,10 @@
 title: Other purrr functions
 theme: program
 needs: purrr-basics
-readings: ~
-updated: ~
-desc: "\n  - [map functions that output\n    tibbles](#map-functions-that-output-tibbles)\n
-  \ - [Walk](#walk)\n  - [Predicate functions](#predicate-functions)\n\nIn this reading,
-  you’ll learn about two more map variants, `map_dfr()`\nand `map_dfc()`. Then, you’ll
-  learn about `walk()`, as well as some\nuseful purrr functions that work with functions
-  that return either\n`TRUE` or `FALSE`.\n\nThe purrr package contains more functions
-  that we can cover. The [purrr\ncheatsheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf)\nis
-  a great way to see an overview of the package or find a helpful\nfunction when you
-  encounter a new type of iteration problem.\n\n## map functions that output tibbles\n\nYou
-  already know how to choose the appropriate map function ending to\nproduce an atomic
-  vector or list. There are also map function variants\nthat produce a single tibble.\n\nWith
-  these map functions, the assembly line worker creates a tibble for\neach input element,
-  and the output conveyor belt ends up with a\ncollection of tibbles. The worker then
-  combines all the small tibbles\ninto a single, larger tibble.\n\nThere are multiple
-  ways to combine smaller tibbles into a larger tibble.\npurrr provides two options:\n\n
-  \ - `map_dfr()` stacks the tibbles on top of each other.\n  - `map_dfc()` stacks
-  them side-by-side.\n\nThere are `_dfr` and `_dfc` variants of `pmap()` and `map2()`
-  as well.\n\n### `_dfr`\n\nYou will often use `map_dfr()` when reading in data. The
-  following code\nreads in several very simple csv files that contain the names of\ndifferent
-  dinosaur genera.\n\n``` r\nread_csv(\"purrr-extras/file_001.csv\")\n```\n\n    ##
-  # A tibble: 1 x 2\n    ##      id genus        \n    ##   <dbl> <chr>        \n
-  \   ## 1     1 Hoplitosaurus\n\n``` r\nread_csv(\"purrr-extras/file_002.csv\")\n```\n\n
-  \   ## # A tibble: 1 x 2\n    ##      id genus        \n    ##   <dbl> <chr>        \n
-  \   ## 1     2 Herrerasaurus\n\n``` r\nread_csv(\"purrr-extras/file_003.csv\")\n```\n\n
-  \   ## # A tibble: 1 x 2\n    ##      id genus      \n    ##   <dbl> <chr>      \n
-  \   ## 1     3 Coelophysis\n\n`read_csv()` produces a tibble, and so we can use
-  `map_dfr()` to map\nover all three file names and bind the resulting individual
-  tibbles into\na single tibble.\n\n``` r\nfiles <- str_glue(\"purrr-extras/file_00{1:3}.csv\")\nfiles\n```\n\n
-  \   ## purrr-extras/file_001.csv\n    ## purrr-extras/file_002.csv\n    ## purrr-extras/file_003.csv\n\n```
-  r\nfiles %>% \n  map_dfr(read_csv)\n```\n\n    ## # A tibble: 3 x 2\n    ##      id
-  genus        \n    ##   <dbl> <chr>        \n    ## 1     1 Hoplitosaurus\n    ##
-  2     2 Herrerasaurus\n    ## 3     3 Coelophysis\n\nThe result is a tibble with
-  three rows and two columns, because\n`map_dfr()` aligns the columns of the individual
-  tibbles by name.\n\nThe individual tibbles can have different numbers of rows or
-  columns.\n`map_dfr()` creates a column for each unique column name.\n\n``` r\nread_csv(\"purrr-extras/file_004.csv\")\n```\n\n
-  \   ## # A tibble: 2 x 3\n    ##      id genus         start_period \n    ##   <dbl>
-  <chr>         <chr>        \n    ## 1     4 Dilophosaurus Sinemurian   \n    ##
-  2     5 Segisaurus    Pliensbachian\n\n``` r\nc(files, \"purrr-extras/file_004.csv\")
-  %>% \n  map_dfr(read_csv)\n```\n\n    ## # A tibble: 5 x 3\n    ##      id genus
-  \        start_period \n    ##   <dbl> <chr>         <chr>        \n    ## 1     1
-  Hoplitosaurus <NA>         \n    ## 2     2 Herrerasaurus <NA>         \n    ##
-  3     3 Coelophysis   <NA>         \n    ## 4     4 Dilophosaurus Sinemurian   \n
-  \   ## 5     5 Segisaurus    Pliensbachian\n\nIf some of the individual tibbles
-  lack a column that others have,\n`map_dfr()` fills in with `NA` values.\n\n### `_dfc`\n\n`map_dfc()`
-  is typically less useful than `map_dfr()`, because it relies\non row position to
-  stack the tibbles side-by-side. Row position is prone\nto error, and it will often
-  be difficult to check if the data in each\nrow is aligned correctly. However, if
-  you have data with variables in\ndifferent places and are positive the rows are
-  aligned, `map_dfc()` may\nbe appropriate.\n\nUnfortunately, even if the individual
-  tibbles contain a unique\nidentifier for each row, `map_dfc()` doesn’t use the identifiers
-  to\nverify that the rows are aligned correctly, nor does it combine\nidentically
-  named columns.\n\n``` r\nread_csv(\"purrr-extras/file_005.csv\")\n```\n\n    ##
-  # A tibble: 1 x 3\n    ##      id diet      start_period\n    ##   <dbl> <chr>     <chr>
-  \      \n    ## 1     1 herbivore Barremian\n\n``` r\nc(\"purrr-extras/file_001.csv\",
-  \"purrr-extras/file_005.csv\") %>% \n  map_dfc(read_csv)\n```\n\n    ## # A tibble:
-  1 x 5\n    ##      id genus           id1 diet      start_period\n    ##   <dbl>
-  <chr>         <dbl> <chr>     <chr>       \n    ## 1     1 Hoplitosaurus     1 herbivore
-  Barremian\n\nInstead, you end up with a duplicated column.\n\nTherefore, if you
-  have a unique identifier for each row, it is *much*\nbetter to use the identifier
-  to join them together.\n\n``` r\nleft_join(\n  read_csv(\"purrr-extras/file_001.csv\"),\n
-  \ read_csv(\"purrr-extras/file_005.csv\"),\n  by = \"id\"\n)\n```\n\n    ## # A
-  tibble: 1 x 4\n    ##      id genus         diet      start_period\n    ##   <dbl>
-  <chr>         <chr>     <chr>       \n    ## 1     1 Hoplitosaurus herbivore Barremian\n\nFinally,
-  because `map_dfc()` combines tibbles by row position, the\ntibbles can have different
-  numbers of columns, but must have the same\nnumber of rows.\n\nThe following files
-  have different numbers of rows, and so `map_dfc()`\nproduces an error.\n\n``` r\nread_csv(\"purrr-extras/file_006.csv\")\n```\n\n
-  \   ## # A tibble: 2 x 2\n    ##   diet      start_period\n    ##   <chr>     <chr>
-  \      \n    ## 1 herbivore Barremian   \n    ## 2 carnivore Albian\n\n``` r\nc(\"purrr-extras/file_001.csv\",
-  \"purrr-extras/file_006.csv\") %>% \n  map_dfc(read_csv)\n```\n\n    ## Error: Argument
-  2 must be length 1, not 2\n\n## Walk\n\nThis short section discusses `walk()`. The
-  walk functions work similarly\nto the map functions, but you use them when you’re
-  interested in\napplying a function that performs an action instead of producing
-  data\n(e.g., `print()`).\n\n  - [Walk](http://r4ds.had.co.nz/iteration.html#walk)
-  \\[r4ds-21.8\\]\n\n## Predicate functions\n\npurrr has some useful functions that
-  work with *predicate functions*,\nwhich are functions that return a single `TRUE`
-  or `FALSE`. For example,\n`keep()` and `discard()` iterate over a vector and keep
-  or discard only\nthose elements for which the predicate function returns `TRUE`.\n\n
-  \ - [Predicate\n    functions](http://r4ds.had.co.nz/iteration.html#predicate-functions)\n
-  \   \\[r4ds-21.9.1\\]\n"
+
+desc: |
+  The purrr package contains much more than just the basic map functions. In 
+this reading, you'll learn about some additional useful types of purrr functions.
+
+readings:
+- book: prog-11
