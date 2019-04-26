@@ -20,6 +20,6 @@ existing column.
 
 ## Readings
 
-  * [purrr inside mutate](https://dcl-prog.stanford.edu/purrr-mutate.html) [prog-11]
+  * [purrr inside mutate](https://dcl-prog.stanford.edu/purrr-mutate.html) [prog-9]
 
 

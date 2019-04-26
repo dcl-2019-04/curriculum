@@ -1,6 +1,6 @@
 title: purrr basics
 theme: program
-needs: [function-basics, function-anonymous]
+needs: [function-basics]
 
 desc: |
   You'll often want to apply the same function to each element of a list or

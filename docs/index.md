@@ -168,12 +168,6 @@ title: Theme index
 <tr>
 <td id='week-4'>4</td>
   <td colspan="4"></td>
-  <td colspan="6"><a class="program" href="function-anonymous.html">Anonymous functions</a></td>
-  <td colspan="2"></td>
-</tr>
-<tr>
-<td></td>
-  <td colspan="4"></td>
   <td colspan="6"><a class="program" href="purrr-basics.html">purrr basics</a></td>
   <td colspan="2"></td>
 </tr>
@@ -198,6 +192,44 @@ title: Theme index
 <td></td>
   <td colspan="1"></td>
   <td colspan="6"><a class="wrangle" href="manip-scoped.html">Scoped verb basics</a></td>
+  <td colspan="5"></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td id='week-5'>5</td>
+  <td colspan="1"></td>
+  <td colspan="6"><a class="wrangle" href="datetime-basics.html">Date/time basics</a></td>
+  <td colspan="5"></td>
+</tr>
+<tr>
+<td></td>
+  <td colspan="4"></td>
+  <td colspan="6"><a class="program" href="function-vector.html">Vector functions</a></td>
+  <td colspan="2"></td>
+</tr>
+<tr>
+<td></td>
+  <td colspan="4"></td>
+  <td colspan="6"><a class="program" href="purrr-mutate.html">purrr in mutate</a></td>
+  <td colspan="2"></td>
+</tr>
+<tr>
+<td></td>
+  <td colspan="3"></td>
+  <td colspan="6"><a class="model" href="model-basics.html">Model basics</a></td>
+  <td colspan="3"></td>
+</tr>
+<tr>
+<td></td>
+  <td colspan="2"></td>
+  <td colspan="6"><a class="visualize" href="vis-continuous-continuous.html">Continuous-continuous relationships</a></td>
+  <td colspan="4"></td>
+</tr>
+<tr>
+<td></td>
+  <td colspan="1"></td>
+  <td colspan="6"><a class="wrangle" href="spatial-basics.html">Spatial basics</a></td>
   <td colspan="5"></td>
 </tr>
 </tbody>

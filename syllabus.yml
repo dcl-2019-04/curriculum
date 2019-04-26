@@ -1,4 +1,4 @@
-cur-week: 04
+cur-week: 05
 
 weeks:
   week-01:
@@ -29,7 +29,6 @@ weeks:
   - vis-scales
 
   week-04:
-  - function-anonymous
   - purrr-basics
   - eda-2d
   - missing-values
@@ -37,16 +36,15 @@ weeks:
   - manip-scoped
 
   week-05:
-  - function-vector
   - datetime-basics
+  - function-vector
   - purrr-mutate
   - model-basics
   - vis-continuous-continuous
+  - spatial-basics
   
-
   week-06:
   - regexps
-  - spatial-basics
   - list-cols
   - vis-time-series
   - factor-basics

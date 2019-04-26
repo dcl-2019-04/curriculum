@@ -4,7 +4,7 @@ needs: purrr-basics
 
 desc: |
   The purrr package contains much more than just the basic map functions. In 
-this reading, you'll learn about some additional useful types of purrr functions.
+  this reading, you'll learn about some additional useful types of purrr functions.
 
 readings:
 - book: prog-11
