@@ -24,6 +24,5 @@ desc: |
   some tools for exploring fitted models. 
   
 readings:
-- book: r4ds-22
 - book: r4ds-23.1
 - book: r4ds-23.2
