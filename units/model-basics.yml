@@ -3,14 +3,27 @@ theme: model
 needs: [setup]
 
 desc: |
-  This course approaches modeling a little differently to most statistics
-  courses. We're not going to rigorously covering the mathematical foundation
-  of models. Instead, you'll get some intution about what a model does,
-  and then learn some computation tools for exploring fitted models.
-
-  In this unit, you'll build up your intuition for what a model does, and what
-  it tells you about a dataset.
-
+  As you already know, it's difficult to understand data just by looking at it in
+  a tibble. Visualizations are one way to gain a better understanding of the 
+  relationships, outliers, and problems present in your data. Modeling is another
+  tactic. 
+  
+  You can think of a model as an approximation of your data. Your approximation 
+  will (probably) never fully capture all the variation in your data, so there
+  will be a gap between your approximation and the truth. The size of this gap
+  determines how well your model approximates (or "fits") your data.
+  
+  Good approximations are useful because they allow you summarize your data
+  in a compact way. If someone asks you about your data, you can hand them
+  your model as a summary, instead of the entire data set (note that this is 
+  only true of parametric models, which are the only type of model we'll cover).
+  
+  This course approaches modeling a little differently than other courses. 
+  We're not going to rigorously cover the mathematical foundations of models.
+  Instead, we'll give you some intuition about what a model does and show you 
+  some tools for exploring fitted models. 
+  
 readings:
+- book: r4ds-22
 - book: r4ds-23.1
 - book: r4ds-23.2
