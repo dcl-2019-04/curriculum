@@ -3,25 +3,18 @@ theme: model
 needs: [setup]
 
 desc: |
-  As you already know, it's difficult to understand data just by looking at it in
-  a tibble. Visualizations are one way to gain a better understanding of the 
-  relationships, outliers, and problems present in your data. Modeling is another
-  tactic. 
+  It's hard to understand data just by looking at it in a tibble. Visualizations
+  are one way to gain a better understanding of the relationships present in
+  your data. Modeling is another approach. 
   
-  You can think of a model as an approximation of your data. Your approximation 
-  will (probably) never fully capture all the variation in your data, so there
-  will be a gap between your approximation and the truth. The size of this gap
-  determines how well your model approximates (or "fits") your data.
+  You can think of a model as an approximation of your data. Often a model with
+  relatively few parameters can capture much of the complexity of a dataset. By
+  finding a model that is a good approximation, you can gain insights into your
+  data.
   
-  Good approximations are useful because they allow you summarize your data
-  in a compact way. If someone asks you about your data, you can hand them
-  your model as a summary, instead of the entire data set (note that this is 
-  only true of parametric models, which are the only type of model we'll cover).
-  
-  This course approaches modeling a little differently than other courses. 
   We're not going to rigorously cover the mathematical foundations of models.
-  Instead, we'll give you some intuition about what a model does and show you 
-  some tools for exploring fitted models. 
+  Instead, we'll give you some intuition for how models approximate data and
+  show you some useful tidyverse tools for fitting and working with models.
   
 readings:
 - book: r4ds-23.1

@@ -8,13 +8,18 @@ title: Model basics
 <small>(Builds on: [Setup](setup.md))</small>  
 <small>(Leads to: [Many models](model-many.md), [Fitting and visualizing models](model-vis.md))</small>
 
-This course approaches modeling a little differently to most statistics
-courses. We're not going to rigorously covering the mathematical foundation
-of models. Instead, you'll get some intution about what a model does,
-and then learn some computation tools for exploring fitted models.
+It's hard to understand data just by looking at it in a tibble. Visualizations
+are one way to gain a better understanding of the relationships present in
+your data. Modeling is another approach. 
 
-In this unit, you'll build up your intuition for what a model does, and what
-it tells you about a dataset.
+You can think of a model as an approximation of your data. Often a model with
+relatively few parameters can capture much of the complexity of a dataset. By
+finding a model that is a good approximation, you can gain insights into your
+data.
+
+We're not going to rigorously cover the mathematical foundations of models.
+Instead, we'll give you some intuition for how models approximate data and
+show you some useful tidyverse tools for fitting and working with models.
 
 ## Readings
 
