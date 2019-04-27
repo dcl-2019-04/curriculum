@@ -19,6 +19,8 @@ In R, there are two main lineages of tools for dealing with spatial data: sp and
 * sf is newer (first released in October 2016) so it doesn't have such a 
   rich ecosystem. However, it's much easier to use and fits in very naturally 
   with the tidyverse. 
+  
+There's a lot you can do with the sf package, and it contains many more functions that we can cover in this reading. The sf package [reference page](https://r-spatial.github.io/sf/reference/index.html) lists all of the functions in the package. There are also some helpful articles on the package website, including [Simple Features for R](https://r-spatial.github.io/sf/articles/sf1.html) and [Manipulating Simple Feature Geometries](https://r-spatial.github.io/sf/articles/sf3.html). 
 
 ## Loading data
 
