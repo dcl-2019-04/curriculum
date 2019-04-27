@@ -58,21 +58,21 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   36.3196, -76.01735 36...\n#> MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...\n```\n\nYou
   can use `plot()` to visualize the `geometry` column.\n\n``` r\nplot(nc$geometry)\n```\n\n![](spatial-basics_files/figure-gfm/nc-plot-1.png)<!--
   -->\n\nEach row in `nc` represents a single county. If you pull out a single\nrow
-  and plot, you’ll get the shape of a single county.\n\n``` r\nalleghany_county <-
-  \n  nc %>% \n  filter(CNTY_ID == 1827)\n\nplot(alleghany_county$geometry)\n```\n\n![](spatial-basics_files/figure-gfm/unnamed-chunk-6-1.png)<!--
+  and plot, you’ll get the shape of a single county.\n\n``` r\nalleghany <- \n  nc
+  %>% \n  filter(NAME == \"Alleghany\")\n\nplot(alleghany$geometry)\n```\n\n![](spatial-basics_files/figure-gfm/unnamed-chunk-6-1.png)<!--
   -->\n\n`plot()` works, but is limited. In the next unit, you’ll learn how to\nuse
   ggplot2 to create more complex spatial visualizations.\n\n### Geometry\n\nLet’s
   dive a little deeper into the structure of the `geometry` column.\nThe `geometry`
-  column is a **list column**. You’re used to working with\ntibble columns that are
+  column is a **list-column**. You’re used to working with\ntibble columns that are
   atomic vectors, but columns can also be lists.\nList columns are incredibly flexible
   because a list can contain any\nother type of data structure, including other lists.\n\n```
-  r\ntypeof(nc$geometry)\n#> [1] \"list\"\n```\n\nLet’s pull out one piece of the
-  `geometry` column so you can see what’s\ngoing on under the hood.\n\n``` r\ncurrituck
-  <- \n  nc %>% \n  filter(NAME == \"Currituck\")\n\ncurrituck_geometry <- currituck$geometry[[1]]\n```\n\nCurrituck
+  r\ntypeof(nc$geometry)\n#> [1] \"list\"\n```\n\nLet’s pull out one row of the `geometry`
+  column so you can see what’s\ngoing on under the hood.\n\n``` r\ncurrituck <- \n
+  \ nc %>% \n  filter(NAME == \"Currituck\")\n\ncurrituck_geometry <- currituck$geometry[[1]]\n```\n\nCurrituck
   county is made up of three separate landmasses.\n\n``` r\nplot(currituck_geometry)\n```\n\n![](spatial-basics_files/figure-gfm/unnamed-chunk-9-1.png)<!--
   -->\n\nHow does a single row of the `geometry` column represent these three\nseparate
-  shapes? It turns out that each element of `nc`’s `geometry`\ncolumn, including `currituck_geometry`,
-  is actually a list of lists of\nmatrices.\n\n``` r\nstr(currituck_geometry)\n#>
+  shapes? It turns out that each element of `nc`’s `geometry`\ncolumn, including `currituck$geometry`,
+  is actually a list of lists of\nmatrices.\n\n``` r\nglimpse(currituck_geometry)\n#>
   List of 3\n#>  $ :List of 1\n#>   ..$ : num [1:26, 1:2] -76 -76 -76 -76 -76.1 ...\n#>
   \ $ :List of 1\n#>   ..$ : num [1:7, 1:2] -76 -76 -75.9 -75.9 -76 ...\n#>  $ :List
   of 1\n#>   ..$ : num [1:5, 1:2] -75.9 -75.9 -75.8 -75.8 -75.9 ...\n#>  - attr(*,
@@ -88,37 +88,32 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   [3,] -75.91192 36.54253\n#> [4,] -75.92480 36.47398\n#> [5,] -75.97728 36.47802\n#>
   [6,] -75.97629 36.51793\n#> [7,] -76.02717 36.55672\n```\n\n## Manipulating with
   dplyr\n\nsf objects like `nc` are tibbles, so you can manipulate them with dplyr.\nThe
-  following code finds all counties in North Carolina with an area\ngreater than 2e9
-  meters squared.\n\n``` r\nnc_large <-\n  nc %>%\n  mutate(area = st_area(geometry)
+  following code finds all counties in North Carolina with an area\ngreater than 2
+  billion square meters.\n\n``` r\nnc_large <-\n  nc %>%\n  mutate(area = st_area(geometry)
   %>% as.numeric()) %>%\n  filter(area > 2e9) \n```\n\n`st_area` finds the area of
-  a geometry, and returns an object with units\n(in this case, \\(m^2\\)).\n\n```
-  r\nalleghany_county %>% \n  st_area(geometry)\n#> 611077263 [m^2]\n```\n\nThese
-  units are helpful, but can be annoying to work with, which is why\nwe used `as.numeric()`
+  a geometry, and returns an object with\nunits, in this case square meters.\n\n```
+  r\nalleghany %>% \n  st_area(geometry)\n#> 611077263 [m^2]\n```\n\nThese units are
+  helpful, but can be annoying to work with, which is why\nwe used `as.numeric()`
   in the earlier `mutate()` statement.\n`as.numeric()` converts the results to a regular
   numeric vector.\n\nThe sf package contains many helpful functions, like `st_area()`,
-  for\nworking with spatial data. They all start with `st_`, so you can type\n`sf::st_`
-  to see a pop-up list of all the options. The sf package\n[reference page](https://r-spatial.github.io/sf/reference/index.html)\nalso
-  lists all functions in the package.\n\n## Coordinate system\n\nEarlier, you saw
-  the following matrix.\n\n``` r\ncurrituck_geometry[[2]][[1]]\n#>           [,1]
+  for\nworking with spatial data. Its [reference\npage](https://r-spatial.github.io/sf/reference/index.html)
+  lists all\nfunctions in the package.\n\n## Coordinate reference system\n\nEarlier,
+  you saw the following matrix.\n\n``` r\ncurrituck_geometry[[2]][[1]]\n#>           [,1]
   \    [,2]\n#> [1,] -76.02717 36.55672\n#> [2,] -75.99866 36.55665\n#> [3,] -75.91192
   36.54253\n#> [4,] -75.92480 36.47398\n#> [5,] -75.97728 36.47802\n#> [6,] -75.97629
   36.51793\n#> [7,] -76.02717 36.55672\n```\n\nThis matrix gives the position of points
-  along the boundary of one of\nCurrituck county’s landmasses. However, these points
-  are pretty\nmeaningless. We need to know the reference point, or **coordinate\nreference
-  system** (CRS) of the `nc` data.\n\nSpatial data is often described in terms of
-  latitude and longitude. The\nfunction `st_is_longlat()` returns `TRUE` if the data
-  uses latitude and\nlongitude.\n\n``` r\nst_is_longlat(nc)\n#> [1] TRUE\n```\n\nNow
-  we know that the points in the matrix are latitudes and longitudes.\nUnfortunately,
-  this still isn’t enough information to figure out exactly\nwhich locations on Earth
-  these points refer to. Latitude and longitude\nvalues are based on the assumption
-  that the Earth is a smooth ellipsoid,\nbut this assumption isn’t true. There are
-  many ways to approximate the\nshape of the Earth, and different approximations work
-  better for\ndifferent geographic locations. These different approximations are\ncalled
-  the **datum**.\n\nTake two minutes and watch this simple explanation of the datum:\n<https://www.youtube.com/watch?v=xKGlMp__jog>\n\nWe
-  can use `st_crs()` to find the datum and other CRS metadata of our\ndata.\n\n```
-  r\nst_crs(nc)\n#> Coordinate Reference System:\n#>   EPSG: 4267 \n#>   proj4string:
-  \"+proj=longlat +datum=NAD27 +no_defs\"\n```\n\nThe datum of `nc` is “NAD27”, the
-  [North American\nDatum](https://en.wikipedia.org/wiki/North_American_Datum) of 1927\n(NAD27).\n\nIt’s
-  useful to understand the datum and know why it exists, but you\ndon’t need to worry
-  too much about it if you’re using sf and ggplot2.\nThese packages take care of most
-  of the details for you.\n"
+  along the boundary of one of\nCurrituck county’s landmasses. Geospatial data represents
+  points on the\nearth in terms with longitude and latitude with respect to a **datum**.\nThe
+  same point can have different longitudes and latitudes with respect\nto different
+  datums.\n\nTake two minutes and watch this [simple explanation of the\ndatum](https://www.youtube.com/watch?v=xKGlMp__jog).\n\nA
+  **coordinate reference system** (CRS) for a geospatial dataset\nconsists of a datum
+  together with **projection** that specifies how\npoints in three dimensions will
+  be represented in two. We can use\n`st_crs()` to find the datum and other CRS metadata
+  of our data.\n\n``` r\nst_crs(nc)\n#> Coordinate Reference System:\n#>   EPSG: 4267
+  \n#>   proj4string: \"+proj=longlat +datum=NAD27 +no_defs\"\n```\n\nThe datum of
+  `nc` is “NAD27”, the [North American\nDatum](https://en.wikipedia.org/wiki/North_American_Datum)
+  of 1927\n(NAD27). And the projection is to simply use the longitude and latitude.\n\nWhen
+  plotting multiple datasets, it is important that they all use the\nsame CRS. Otherwise,
+  points won’t properly line up. Fortunately,\n`st_transform()` can be use to transform
+  datasets to a common CRS, and\nggplot2 will automatically convert layers to have
+  a common CRS.\n"

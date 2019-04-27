@@ -147,11 +147,11 @@ Each row in `nc` represents a single county. If you pull out a single
 row and plot, you’ll get the shape of a single county.
 
 ``` r
-alleghany_county <- 
+alleghany <- 
   nc %>% 
-  filter(CNTY_ID == 1827)
+  filter(NAME == "Alleghany")
 
-plot(alleghany_county$geometry)
+plot(alleghany$geometry)
 ```
 
 ![](spatial-basics_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
@@ -162,7 +162,7 @@ use ggplot2 to create more complex spatial visualizations.
 ### Geometry
 
 Let’s dive a little deeper into the structure of the `geometry` column.
-The `geometry` column is a **list column**. You’re used to working with
+The `geometry` column is a **list-column**. You’re used to working with
 tibble columns that are atomic vectors, but columns can also be lists.
 List columns are incredibly flexible because a list can contain any
 other type of data structure, including other lists.
@@ -172,7 +172,7 @@ typeof(nc$geometry)
 #> [1] "list"
 ```
 
-Let’s pull out one piece of the `geometry` column so you can see what’s
+Let’s pull out one row of the `geometry` column so you can see what’s
 going on under the hood.
 
 ``` r
@@ -193,11 +193,11 @@ plot(currituck_geometry)
 
 How does a single row of the `geometry` column represent these three
 separate shapes? It turns out that each element of `nc`’s `geometry`
-column, including `currituck_geometry`, is actually a list of lists of
+column, including `currituck$geometry`, is actually a list of lists of
 matrices.
 
 ``` r
-str(currituck_geometry)
+glimpse(currituck_geometry)
 #> List of 3
 #>  $ :List of 1
 #>   ..$ : num [1:26, 1:2] -76 -76 -76 -76 -76.1 ...
@@ -242,7 +242,7 @@ currituck_geometry[[2]][[1]]
 
 sf objects like `nc` are tibbles, so you can manipulate them with dplyr.
 The following code finds all counties in North Carolina with an area
-greater than 2e9 meters squared.
+greater than 2 billion square meters.
 
 ``` r
 nc_large <-
@@ -251,11 +251,11 @@ nc_large <-
   filter(area > 2e9) 
 ```
 
-`st_area` finds the area of a geometry, and returns an object with units
-(in this case, \(m^2\)).
+`st_area` finds the area of a geometry, and returns an object with
+units, in this case square meters.
 
 ``` r
-alleghany_county %>% 
+alleghany %>% 
   st_area(geometry)
 #> 611077263 [m^2]
 ```
@@ -265,12 +265,11 @@ we used `as.numeric()` in the earlier `mutate()` statement.
 `as.numeric()` converts the results to a regular numeric vector.
 
 The sf package contains many helpful functions, like `st_area()`, for
-working with spatial data. They all start with `st_`, so you can type
-`sf::st_` to see a pop-up list of all the options. The sf package
-[reference page](https://r-spatial.github.io/sf/reference/index.html)
-also lists all functions in the package.
+working with spatial data. Its [reference
+page](https://r-spatial.github.io/sf/reference/index.html) lists all
+functions in the package.
 
-## Coordinate system
+## Coordinate reference system
 
 Earlier, you saw the following matrix.
 
@@ -287,33 +286,18 @@ currituck_geometry[[2]][[1]]
 ```
 
 This matrix gives the position of points along the boundary of one of
-Currituck county’s landmasses. However, these points are pretty
-meaningless. We need to know the reference point, or **coordinate
-reference system** (CRS) of the `nc` data.
+Currituck county’s landmasses. Geospatial data represents points on the
+earth in terms with longitude and latitude with respect to a **datum**.
+The same point can have different longitudes and latitudes with respect
+to different datums.
 
-Spatial data is often described in terms of latitude and longitude. The
-function `st_is_longlat()` returns `TRUE` if the data uses latitude and
-longitude.
+Take two minutes and watch this [simple explanation of the
+datum](https://www.youtube.com/watch?v=xKGlMp__jog).
 
-``` r
-st_is_longlat(nc)
-#> [1] TRUE
-```
-
-Now we know that the points in the matrix are latitudes and longitudes.
-Unfortunately, this still isn’t enough information to figure out exactly
-which locations on Earth these points refer to. Latitude and longitude
-values are based on the assumption that the Earth is a smooth ellipsoid,
-but this assumption isn’t true. There are many ways to approximate the
-shape of the Earth, and different approximations work better for
-different geographic locations. These different approximations are
-called the **datum**.
-
-Take two minutes and watch this simple explanation of the datum:
-<https://www.youtube.com/watch?v=xKGlMp__jog>
-
-We can use `st_crs()` to find the datum and other CRS metadata of our
-data.
+A **coordinate reference system** (CRS) for a geospatial dataset
+consists of a datum together with **projection** that specifies how
+points in three dimensions will be represented in two. We can use
+`st_crs()` to find the datum and other CRS metadata of our data.
 
 ``` r
 st_crs(nc)
@@ -324,9 +308,10 @@ st_crs(nc)
 
 The datum of `nc` is “NAD27”, the [North American
 Datum](https://en.wikipedia.org/wiki/North_American_Datum) of 1927
-(NAD27).
+(NAD27). And the projection is to simply use the longitude and latitude.
 
-It’s useful to understand the datum and know why it exists, but you
-don’t need to worry too much about it if you’re using sf and ggplot2.
-These packages take care of most of the details for you.
+When plotting multiple datasets, it is important that they all use the
+same CRS. Otherwise, points won’t properly line up. Fortunately,
+`st_transform()` can be use to transform datasets to a common CRS, and
+ggplot2 will automatically convert layers to have a common CRS.
 
