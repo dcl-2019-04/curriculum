@@ -103,13 +103,13 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   36.54253\n#> [4,] -75.92480 36.47398\n#> [5,] -75.97728 36.47802\n#> [6,] -75.97629
   36.51793\n#> [7,] -76.02717 36.55672\n```\n\nThis matrix gives the position of points
   along the boundary of one of\nCurrituck county’s landmasses. Geospatial data represents
-  points on the\nearth in terms with longitude and latitude with respect to a **datum**.\nThe
+  points on the\nearth in terms of longitude and latitude with respect to a **datum**.\nThe
   same point can have different longitudes and latitudes with respect\nto different
-  datums.\n\nTake two minutes and watch this [simple explanation of the\ndatum](https://www.youtube.com/watch?v=xKGlMp__jog).\n\nA
+  datums.\n\nTake two minutes and watch this [simple explanation of\ndatums](https://www.youtube.com/watch?v=xKGlMp__jog).\n\nA
   **coordinate reference system** (CRS) for a geospatial dataset\nconsists of a datum
-  together with **projection** that specifies how\npoints in three dimensions will
-  be represented in two. We can use\n`st_crs()` to find the datum and other CRS metadata
-  of our data.\n\n``` r\nst_crs(nc)\n#> Coordinate Reference System:\n#>   EPSG: 4267
+  together with a **projection** that specifies how\npoints in three dimensions will
+  be represented in two. We can use\n`st_crs()` to find the datum and projection of
+  our data.\n\n``` r\nst_crs(nc)\n#> Coordinate Reference System:\n#>   EPSG: 4267
   \n#>   proj4string: \"+proj=longlat +datum=NAD27 +no_defs\"\n```\n\nThe datum of
   `nc` is “NAD27”, the [North American\nDatum](https://en.wikipedia.org/wiki/North_American_Datum)
   of 1927\n(NAD27). And the projection is to simply use the longitude and latitude.\n\nWhen

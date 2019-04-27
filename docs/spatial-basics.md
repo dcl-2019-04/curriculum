@@ -287,17 +287,17 @@ currituck_geometry[[2]][[1]]
 
 This matrix gives the position of points along the boundary of one of
 Currituck county’s landmasses. Geospatial data represents points on the
-earth in terms with longitude and latitude with respect to a **datum**.
+earth in terms of longitude and latitude with respect to a **datum**.
 The same point can have different longitudes and latitudes with respect
 to different datums.
 
-Take two minutes and watch this [simple explanation of the
-datum](https://www.youtube.com/watch?v=xKGlMp__jog).
+Take two minutes and watch this [simple explanation of
+datums](https://www.youtube.com/watch?v=xKGlMp__jog).
 
 A **coordinate reference system** (CRS) for a geospatial dataset
-consists of a datum together with **projection** that specifies how
+consists of a datum together with a **projection** that specifies how
 points in three dimensions will be represented in two. We can use
-`st_crs()` to find the datum and other CRS metadata of our data.
+`st_crs()` to find the datum and projection of our data.
 
 ``` r
 st_crs(nc)
