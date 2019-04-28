@@ -90,7 +90,7 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   dplyr\n\nsf objects like `nc` are tibbles, so you can manipulate them with dplyr.\nThe
   following code finds all counties in North Carolina with an area\ngreater than 2
   billion square meters.\n\n``` r\nnc_large <-\n  nc %>%\n  mutate(area = st_area(geometry)
-  %>% as.numeric()) %>%\n  filter(area > 2e9) \n```\n\n`st_area` finds the area of
+  %>% as.double()) %>%\n  filter(area > 2e9) \n```\n\n`st_area` finds the area of
   a geometry, and returns an object with\nunits, in this case square meters.\n\n```
   r\nalleghany %>% \n  st_area(geometry)\n#> 611077263 [m^2]\n```\n\nThese units are
   helpful, but can be annoying to work with, which is why\nwe used `as.numeric()`
@@ -114,6 +114,6 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   `nc` is “NAD27”, the [North American\nDatum](https://en.wikipedia.org/wiki/North_American_Datum)
   of 1927\n(NAD27). And the projection is to simply use the longitude and latitude.\n\nWhen
   plotting multiple datasets, it is important that they all use the\nsame CRS. Otherwise,
-  points won’t properly line up. Fortunately,\n`st_transform()` can be use to transform
+  points won’t properly line up. Fortunately,\n`st_transform()` can be used to transform
   datasets to a common CRS, and\nggplot2 will automatically convert layers to have
   a common CRS.\n"

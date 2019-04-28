@@ -248,7 +248,7 @@ greater than 2 billion square meters.
 ``` r
 nc_large <-
   nc %>%
-  mutate(area = st_area(geometry) %>% as.numeric()) %>%
+  mutate(area = st_area(geometry) %>% as.double()) %>%
   filter(area > 2e9) 
 ```
 
@@ -313,6 +313,6 @@ Datum](https://en.wikipedia.org/wiki/North_American_Datum) of 1927
 
 When plotting multiple datasets, it is important that they all use the
 same CRS. Otherwise, points won’t properly line up. Fortunately,
-`st_transform()` can be use to transform datasets to a common CRS, and
+`st_transform()` can be used to transform datasets to a common CRS, and
 ggplot2 will automatically convert layers to have a common CRS.
 

@@ -166,7 +166,7 @@ sf objects like `nc` are tibbles, so you can manipulate them with dplyr. The fol
 ```{r}
 nc_large <-
   nc %>%
-  mutate(area = st_area(geometry) %>% as.numeric()) %>%
+  mutate(area = st_area(geometry) %>% as.double()) %>%
   filter(area > 2e9) 
 ```
 
@@ -201,4 +201,4 @@ st_crs(nc)
 
 The datum of `nc` is "NAD27", the [North American Datum](https://en.wikipedia.org/wiki/North_American_Datum) of 1927 (NAD27). And the projection is to simply use the longitude and latitude.
 
-When plotting multiple datasets, it is important that they all use the same CRS. Otherwise, points won't properly line up. Fortunately, `st_transform()` can be use to transform datasets to a common CRS, and ggplot2 will automatically convert layers to have a common CRS.
+When plotting multiple datasets, it is important that they all use the same CRS. Otherwise, points won't properly line up. Fortunately, `st_transform()` can be used to transform datasets to a common CRS, and ggplot2 will automatically convert layers to have a common CRS.
