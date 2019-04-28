@@ -72,17 +72,19 @@ linestring <- matrix(unlist(points[c(4, 3, 1, 2)]), ncol = 2, byrow = TRUE)
 polygon <- list(matrix(unlist(points[c(1:4, 1)]), ncol = 2, byrow = TRUE))
   
 tribble(
-  ~type,        ~geometry,
-  "Point",      st_point(x = point),
-  "Linestring", st_linestring(x = linestring),
-  "Polygon",    st_polygon(x = polygon)
+  ~type,            ~geometry,
+  "\nPoint\n",      st_point(x = point),
+  "\nLinestring\n", st_linestring(x = linestring),
+  "\nPolygon\n",    st_polygon(x = polygon)
 ) %>% 
-  mutate(type = fct_relevel(type, "Linestring", after = 1)) %>% 
+  mutate(type = fct_relevel(type, "\nLinestring\n", after = 1)) %>% 
   st_as_sf() %>% 
   ggplot() +
   geom_sf() +
-  coord_sf(xlim = c(0, 4), ylim = c(0, 4)) +
-  facet_grid(cols = vars(type)) 
+  coord_sf(xlim = c(0.5, 3.5), ylim = c(0.5, 3.5), datum = NA) +
+  theme_void() +
+  theme(strip.text = element_text(size = 24, vjust = 0.5)) +
+  facet_grid(cols = vars(type))
 ```
 
 There are also _multi_ variants of these basic types: multipoint, multilinestring, and multipolygon. These multi types can contain multiple points, linestrings, or polygons. The final type, geometry collection, can contain multiple different types (e.g., points, linestrings, and multipolygons).
