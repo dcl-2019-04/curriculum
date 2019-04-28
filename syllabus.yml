@@ -39,10 +39,10 @@ weeks:
   - datetime-basics
   - function-vector
   - purrr-mutate
-  - model-basics
-  - vis-continuous-continuous
   - spatial-basics
-  
+  - vis-continuous-continuous
+  - model-basics
+
   week-06:
   - regexps
   - list-cols
