@@ -93,9 +93,9 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   %>% as.double()) %>%\n  filter(area > 2e9) \n```\n\n`st_area` finds the area of
   a geometry, and returns an object with\nunits, in this case square meters.\n\n```
   r\nalleghany %>% \n  st_area(geometry)\n#> 611077263 [m^2]\n```\n\nThese units are
-  helpful, but can be annoying to work with, which is why\nwe used `as.numeric()`
-  in the earlier `mutate()` statement.\n`as.numeric()` converts the results to a regular
-  numeric vector.\n\nThe sf package contains many helpful functions, like `st_area()`,
+  helpful, but can be annoying to work with, which is why\nwe used `as.double()` in
+  the earlier `mutate()` statement. `as.double()`\nconverts the results to a regular
+  double vector.\n\nThe sf package contains many helpful functions, like `st_area()`,
   for\nworking with spatial data. Its [reference\npage](https://r-spatial.github.io/sf/reference/index.html)
   lists all\nfunctions in the package.\n\n## Coordinate reference system\n\nEarlier,
   you saw the following matrix.\n\n``` r\ncurrituck_geometry[[2]][[1]]\n#>           [,1]

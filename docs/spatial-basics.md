@@ -262,8 +262,8 @@ alleghany %>%
 ```
 
 These units are helpful, but can be annoying to work with, which is why
-we used `as.numeric()` in the earlier `mutate()` statement.
-`as.numeric()` converts the results to a regular numeric vector.
+we used `as.double()` in the earlier `mutate()` statement. `as.double()`
+converts the results to a regular double vector.
 
 The sf package contains many helpful functions, like `st_area()`, for
 working with spatial data. Its [reference
