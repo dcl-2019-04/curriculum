@@ -20,7 +20,7 @@ In R, there are two main lineages of tools for dealing with spatial data: sp and
   rich ecosystem. However, it's much easier to use and fits in very naturally 
   with the tidyverse. 
   
-There's a lot you can do with the sf package, and it contains many more functions that we can cover in this reading. The sf package [reference page](https://r-spatial.github.io/sf/reference/index.html) lists all of the functions in the package. There are also some helpful articles on the package website, including [Simple Features for R](https://r-spatial.github.io/sf/articles/sf1.html) and [Manipulating Simple Feature Geometries](https://r-spatial.github.io/sf/articles/sf3.html). 
+There's a lot you can do with the sf package, and it contains many more functions that we can cover in this reading. The sf package [reference page](https://r-spatial.github.io/sf/reference/index.html) lists all of the functions in the package. There are also some helpful articles on the [package website](https://r-spatial.github.io/sf/), including [Simple Features for R](https://r-spatial.github.io/sf/articles/sf1.html) and [Manipulating Simple Feature Geometries](https://r-spatial.github.io/sf/articles/sf3.html). 
 
 ## Loading data
 
@@ -66,22 +66,22 @@ nc %>%
 The `geometry` column contains __simple features__. Simple features are a standard way of representing geometry types. The most basic geometry types are point, linestring, and polygon.
 
 ```{r echo=FALSE}
-set.seed(357)
-
-polygon_points <- 
-  list(rbind(c(1, 1), c(3, 1), c(3, 3), c(1, 3), c(1, 1)))
-linestring_points <- matrix(sample(1:5, 8, replace = TRUE), 4, 2)
+point <- c(2, 2)
+points <- list(c(1, 1), c(3, 1), c(3, 3), c(1, 3))
+linestring <- matrix(unlist(points[c(4, 3, 1, 2)]), ncol = 2, byrow = TRUE)
+polygon <- list(matrix(unlist(points[c(1:4, 1)]), ncol = 2, byrow = TRUE))
   
 tribble(
-  ~type, ~geometry,
-  "Point", st_point(x = c(2, 3)),
-  "Linestring", st_linestring(linestring_points),
-  "Polygon", st_polygon(polygon_points)
+  ~type,        ~geometry,
+  "Point",      st_point(x = point),
+  "Linestring", st_linestring(x = linestring),
+  "Polygon",    st_polygon(x = polygon)
 ) %>% 
   mutate(type = fct_relevel(type, "Linestring", after = 1)) %>% 
   st_as_sf() %>% 
   ggplot() +
   geom_sf() +
+  coord_sf(xlim = c(0, 4), ylim = c(0, 4)) +
   facet_grid(cols = vars(type)) 
 ```
 
@@ -189,7 +189,7 @@ Earlier, you saw the following matrix.
 currituck_geometry[[2]][[1]]
 ```
 
-This matrix gives the position of points along the boundary of one of Currituck county's landmasses. Geospatial data represents points on the earth in terms of longitude and latitude with respect to a __datum__. The same point can have different longitudes and latitudes with respect to different datums.
+This matrix gives the position of points along the boundary of one of Currituck county's landmasses. Geospatial data represents points on the earth in terms of longitude and latitude with respect to a __datum__. The same point can have a different longitude and latitude with respect to different datums.
 
 Take two minutes and watch this [simple explanation of datums](https://www.youtube.com/watch?v=xKGlMp__jog).
 

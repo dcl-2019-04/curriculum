@@ -27,7 +27,8 @@ There’s a lot you can do with the sf package, and it contains many more
 functions that we can cover in this reading. The sf package [reference
 page](https://r-spatial.github.io/sf/reference/index.html) lists all of
 the functions in the package. There are also some helpful articles on
-the package website, including [Simple Features for
+the [package website](https://r-spatial.github.io/sf/), including
+[Simple Features for
 R](https://r-spatial.github.io/sf/articles/sf1.html) and [Manipulating
 Simple Feature
 Geometries](https://r-spatial.github.io/sf/articles/sf3.html).
@@ -288,7 +289,7 @@ currituck_geometry[[2]][[1]]
 This matrix gives the position of points along the boundary of one of
 Currituck county’s landmasses. Geospatial data represents points on the
 earth in terms of longitude and latitude with respect to a **datum**.
-The same point can have different longitudes and latitudes with respect
+The same point can have a different longitude and latitude with respect
 to different datums.
 
 Take two minutes and watch this [simple explanation of

@@ -12,8 +12,8 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   \   naturally with the tidyverse.\n\nThere’s a lot you can do with the sf package,
   and it contains many more\nfunctions that we can cover in this reading. The sf package
   [reference\npage](https://r-spatial.github.io/sf/reference/index.html) lists all
-  of\nthe functions in the package. There are also some helpful articles on\nthe package
-  website, including [Simple Features for\nR](https://r-spatial.github.io/sf/articles/sf1.html)
+  of\nthe functions in the package. There are also some helpful articles on\nthe [package
+  website](https://r-spatial.github.io/sf/), including\n[Simple Features for\nR](https://r-spatial.github.io/sf/articles/sf1.html)
   and [Manipulating\nSimple Feature\nGeometries](https://r-spatial.github.io/sf/articles/sf3.html).\n\n##
   Loading data\n\nTo read spatial data in R, use `read_sf()`. The following code reads
   an\nexample dataset built into the sf package.\n\n``` r\nlibrary(tidyverse)\nlibrary(sf)\n\n#
@@ -104,7 +104,7 @@ desc: "\n## Spatial packages\n\nIn R, there are two main lineages of tools for d
   36.51793\n#> [7,] -76.02717 36.55672\n```\n\nThis matrix gives the position of points
   along the boundary of one of\nCurrituck county’s landmasses. Geospatial data represents
   points on the\nearth in terms of longitude and latitude with respect to a **datum**.\nThe
-  same point can have different longitudes and latitudes with respect\nto different
+  same point can have a different longitude and latitude with respect\nto different
   datums.\n\nTake two minutes and watch this [simple explanation of\ndatums](https://www.youtube.com/watch?v=xKGlMp__jog).\n\nA
   **coordinate reference system** (CRS) for a geospatial dataset\nconsists of a datum
   together with a **projection** that specifies how\npoints in three dimensions will
