@@ -83,7 +83,7 @@ tribble(
   geom_sf() +
   coord_sf(xlim = c(0.5, 3.5), ylim = c(0.5, 3.5), datum = NA) +
   theme_void() +
-  theme(strip.text = element_text(size = 24, vjust = 0.5)) +
+  theme(strip.text = element_text(size = 18, vjust = 0.5)) +
   facet_grid(cols = vars(type))
 ```
 
