@@ -45,6 +45,7 @@ weeks:
 
   week-06:
   - list-cols
+  - function-predicate
   - manip-scoped-2
   - regexps
   - vis-time-series

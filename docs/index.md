@@ -242,6 +242,12 @@ title: Theme index
 </tr>
 <tr>
 <td></td>
+  <td colspan="4"></td>
+  <td colspan="6"><a class="program" href="function-predicate.html">Predicate functions</a></td>
+  <td colspan="2"></td>
+</tr>
+<tr>
+<td></td>
   <td colspan="1"></td>
   <td colspan="6"><a class="wrangle" href="manip-scoped-2.html">Scoped verbs with predicates</a></td>
   <td colspan="5"></td>
