@@ -1,4 +1,4 @@
-cur-week: 05
+cur-week: 06
 
 weeks:
   week-01:
@@ -44,15 +44,16 @@ weeks:
   - model-basics
 
   week-06:
-  - regexps
   - list-cols
+  - manip-scoped-2
+  - regexps
   - vis-time-series
   - factor-basics
   - model-vis
 
   week-07:
   - function-predicate
-  - manip-scoped-2
+  
   - timespans
   - model-multivariate
   - purrr-parallel
