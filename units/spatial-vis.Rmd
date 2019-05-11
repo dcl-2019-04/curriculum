@@ -177,7 +177,7 @@ You'll need to use `coord_sf()` for two reasons:
       geom_sf()
     ```
   
-    If you're visualizing the entire US, it's better to use the US Albers projection. Albers is an equal-area projection, which means it accurately reflects the areas of geographic regions. Below is the proj.4 string for the US Albers projection.
+    If you're visualizing the entire US, it's better to use the US Albers projection. Albers is an equal-area projection, which means it accurately reflects the areas of geographic regions. Below is the proj.4 string for the US Albers projection. 
     
     ```{r}
     US_ALBERS <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=WGS84 +no_defs"
