@@ -3,27 +3,89 @@ theme: visualize
 needs: spatial-basics
 readings: ~
 updated: ~
-desc: "\nSetup\n-----\n\nWe'll start by loading the tidyverse, sf, and read in a couple
-  of sample datasets.\n\n``` r\nlibrary(tidyverse)\nlibrary(sf)\n\nnc <- read_sf(system.file(\"shape/nc.shp\",
-  package = \"sf\"))\nstates <- st_as_sf(maps::map(\"state\", plot = FALSE, fill =
-  TRUE))\n```\n\n`geom_sf()`\n-----------\n\nThe easiest way to get started is to
-  supply an sf object to `geom_sf()`:\n\n``` r\nggplot() +\n  geom_sf(data = nc)\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-2-1.png)\n\nNotice
-  that ggplot2 takes care of setting the aspect ratio correctly.\n\nYou can supply
-  other aesthetics: for polygons, `fill` is most useful:\n\n``` r\nggplot() +\n  geom_sf(aes(fill
-  = AREA), data = nc, color = \"white\")\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-3-1.png)\n\nWhen
-  you include multiple layers, ggplot2 will take care of ensuring that they all have
-  a common coordinate reference system (CRS) so that it makes sense to overlay them.\n\n```
-  r\nggplot() +\n  geom_sf(data = states) + \n  geom_sf(data = nc)\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-4-1.png)\n\nYou
-  can combine `geom_sf()` with other geoms. In this case, `x` and `y` positions are
-  assumed be in the same CRS as the sf object (typically these will be longitude and
-  latitude).\n\n``` r\nggplot() +\n  geom_sf(data = nc) +\n  annotate(geom = \"point\",
-  x = -80, y = 35, color = \"red\", size = 4)\n```\n\n![](spatial-vis_files/figure-markdown_github/unnamed-chunk-5-1.png)\n\n`coord_sf()`\n------------\n\nYou'll
-  need to use `coord_sf()` for two reasons:\n\n-   You want to zoom into a specified
-  region of the plot by using `xlim` and `ylim`\n\n    ``` r\n    ggplot() +\n      geom_sf(data
-  = nc) +\n      annotate(geom = \"point\", x = -80, y = 35, color = \"red\", size
-  = 4) + \n      coord_sf(xlim = c(-81, -79), ylim = c(34, 36))\n    ```\n\n    ![](spatial-vis_files/figure-markdown_github/unnamed-chunk-6-1.png)\n\n-
-  \  You want to override to use a specific projection. If you don't specify the `crs`
-  argument, it just uses the one provided in the first layer. The following example
-  uses an Albers Equal Area projection and the NAD83 datum, with an EPSG code of 102003.\n\n
-  \   ``` r\n    ggplot() +\n      geom_sf(data = states) +\n      coord_sf(crs =
-  st_crs(102003))\n    ```\n\n    ![](spatial-vis_files/figure-markdown_github/unnamed-chunk-7-1.png)\n"
+desc: "\n## Setup\n\nWe’ll start by reading in a couple of sample data sets, as well
+  as\nloading the sf package.\n\n``` r\nlibrary(tidyverse)\nlibrary(sf)\n\nnc_1974
+  <- \n  read_sf(system.file(\"shape/nc.shp\", package = \"sf\")) %>% \n  select(FIPS,
+  NAME, births = BIR74, sids = SID74,  geometry) %>% \n  rename_all(str_to_lower)
+  \n\nstates <- st_as_sf(maps::map(\"state\", plot = FALSE, fill = TRUE))\n```\n\nIn
+  Spatial basics, you learned how to plot spatial data using the\n`plot()` function.
+  Now, we’ll show you how to visualize spatial data\nusing `geom_sf()`. The advantage
+  of `geom_sf()` is that, as part of\nggplot2, you can layer geoms, use scales functions
+  to change colors,\ntweak your legends, alter the theme, etc.\n\n## `geom_sf()`\n\n`nc_74`
+  contains data on deaths from Sudden Infant Death Syndrome (SIDS)\nin 1974 for counties
+  in North Carolina.\n\n``` r\nnc_1974\n#> Simple feature collection with 100 features
+  and 4 fields\n#> geometry type:  MULTIPOLYGON\n#> dimension:      XY\n#> bbox:           xmin:
+  -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965\n#> epsg (SRID):    4267\n#>
+  proj4string:    +proj=longlat +datum=NAD27 +no_defs\n#> # A tibble: 100 x 5\n#>
+  \   fips  name     births  sids                                     geometry\n#>
+  \   <chr> <chr>     <dbl> <dbl>                           <MULTIPOLYGON [°]>\n#>
+  \ 1 37009 Ashe       1091     1 (((-81.47276 36.23436, -81.54084 36.27251, …\n#>
+  \ 2 37005 Allegha…    487     0 (((-81.23989 36.36536, -81.24069 36.37942, …\n#>
+  \ 3 37171 Surry      3188     5 (((-80.45634 36.24256, -80.47639 36.25473, …\n#>
+  \ 4 37053 Curritu…    508     1 (((-76.00897 36.3196, -76.01735 36.33773, -…\n#>
+  \ 5 37131 Northam…   1421     9 (((-77.21767 36.24098, -77.23461 36.2146, -…\n#>
+  \ 6 37091 Hertford   1452     7 (((-76.74506 36.23392, -76.98069 36.23024, …\n#>
+  \ 7 37029 Camden      286     0 (((-76.00897 36.3196, -75.95718 36.19377, -…\n#>
+  \ 8 37073 Gates       420     0 (((-76.56251 36.34057, -76.60424 36.31498, …\n#>
+  \ 9 37185 Warren      968     4 (((-78.30876 36.26004, -78.28293 36.29188, …\n#>
+  10 37169 Stokes     1612     1 (((-80.02567 36.25023, -80.45301 36.25709, …\n#>
+  # … with 90 more rows\n```\n\nFirst, let’s just plot the county boundaries. `geom_sf()`
+  works like the\nother geoms, except that you don’t need to specify an aesthetic
+  mapping.\nBy default, `geom_sf()` will plot your `geometry` column.\n\n``` r\nnc_1974
+  %>% \n  ggplot() +\n  geom_sf()\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-3-1.png)<!--
+  -->\n\nNotice that ggplot2 takes care of setting the aspect ratio correctly. If\nwe
+  just plot a single county in North Carolina, the default aspect ratio\nwill be different.\n\n```
+  r\nnc_1974 %>% \n  filter(name == \"Anson\") %>% \n  ggplot() +\n  geom_sf()\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-4-1.png)<!--
+  -->\n\nJust like with other geoms, you can supply additional aesthetics. For\npolygons
+  like the counties of North Carolina, `fill` is the most useful\naesthetic. Let’s
+  visualize the number of births by county.\n\n``` r\nnc_1974 %>% \n  ggplot(aes(fill
+  = births)) +\n  geom_sf(color = \"white\", size = 0.2)\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-5-1.png)<!--
+  -->\n\nMaps like this one, in which geographic areas are colored according to\nsome
+  variable, are called *choropleths*.\n\n``` r\nnc_1974 %>% \n  ggplot(aes(fill =
+  births)) +\n  geom_sf(color = \"white\", size = 0.2)\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-6-1.png)<!--
+  -->\n\nNotice how it’s difficult to tell the difference between many of the\ncounties,
+  especially those with very low numbers of births.\n\nLet’s look at the distribution
+  of births.\n\n``` r\nnc_1974 %>% \n  ggplot(aes(births)) +\n  geom_histogram(binwidth
+  = 500) +\n  scale_x_continuous(breaks = seq(0, 2e5, 2e3))\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-7-1.png)<!--
+  -->\n\nAlmost all of the counties fall between 0 and 8,000, but because there\nare
+  some counties with births up to 22,000, the sequential color scale\nwill linearly
+  map colors between 0 and 22,000.\n\nOne way to deal with this problem is to cap
+  `births`.\n\n``` r\nnc_1974 %>% \n  mutate(births = pmin(births, 1e4)) %>% \n  ggplot(aes(fill
+  = births)) +\n  geom_sf()\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-8-1.png)<!--
+  -->\n\n## Layering\n\nWhen you include multiple geospatial layers, ggplot2 will
+  ensure that\nthey all have a common coordinate reference system (CRS) so that it\nmakes
+  sense to overlay them.\n\n``` r\nggplot() +\n  geom_sf(data = states) + \n  geom_sf(data
+  = nc_1974)\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->\n\nIn
+  the above code, we didn’t pipe any data into `ggplot()` because each\nlayer uses
+  different data.\n\nBecause `geom_sf()` is part of ggplot2, you can combine `geom_sf()`
+  with\nother geoms.\n\n``` r\nraleigh <- \n  tibble(\n    x = -78.644257,\n    y
+  = 35.787743,\n    label = \"Raleigh\"\n  )\n\nnc_1974 %>% \n  mutate(births = pmin(births,
+  1e4)) %>% \n  ggplot() +\n  geom_sf(aes(fill = births)) +\n  geom_point(aes(x, y),
+  color = \"red\", data = raleigh) +\n  geom_label(aes(x, y, label = label), nudge_x
+  = 0.8, data = raleigh) +\n  scale_fill_gradient(low = \"#efedf5\", high = \"#756bb1\")\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-10-1.png)<!--
+  -->\n\nIn this case, the `x` and `y` positions of the Raleigh dot are assumed\nbe
+  in the same CRS as the sf object.\n\nYou can find this lighter color scale, and
+  many others, at the\n[ColorBrewer website](http://colorbrewer2.org/#).\n\n## `coord_sf()`\n\nYou’ll
+  need to use `coord_sf()` for two reasons:\n\n  - You want to zoom into a specified
+  region of the plot.\n    \n    The following plot shows the SIDS rate by county.\n
+  \   \n    ``` r\n    nc_1974 <-\n      nc_1974 %>% \n      mutate(sids_rate = sids
+  / births)\n    \n    nc_1974 %>% \n      ggplot(aes(fill = sids_rate)) + \n      geom_sf()\n
+  \   ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-11-1.png)<!--
+  -->\n    \n    Let’s zoom in on the county with the highest rate (and also change\n
+  \   the color scale).\n    \n    ``` r\n    nc_1974 %>% \n      ggplot(aes(fill
+  = sids_rate)) + \n      geom_sf() +\n      scale_fill_gradient(low = \"#efedf5\",
+  high = \"#756bb1\") +\n      coord_sf(xlim = c(-80.5, -79), ylim = c(34.8, 36))\n
+  \   ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-12-1.png)<!--
+  -->\n\n  - You can also use `coord_sf()` to override the projection in the\n    data.
+  If you don’t specify the `crs` argument to `coord_sf()`, if\n    defaults to the
+  CRS given in the data.\n    \n    The CRS for the `states` data is\n    \n    ```
+  r\n    states %>% \n      st_crs()\n    #> Coordinate Reference System:\n    #>
+  \  EPSG: 4326 \n    #>   proj4string: \"+proj=longlat +datum=WGS84 +no_defs\"\n
+  \   ```\n    \n    which produces a map that looks like this:\n    \n    ``` r\n
+  \   states %>% \n      ggplot() +\n      geom_sf()\n    ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-14-1.png)<!--
+  -->\n    \n    If you’re visualizing the entire US, it’s better to use the US\n
+  \   Albers projection. Albers is an equal-area projection, which means\n    it accurately
+  reflects the areas of geographic regions. The ESPG\n    code of US Albers is 102003.\n
+  \   \n    ``` r\n    states %>% \n      ggplot() +\n      geom_sf() +\n      coord_sf(crs
+  = st_crs(102003))\n    ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-15-1.png)<!--
+  -->\n"

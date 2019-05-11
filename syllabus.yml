@@ -62,8 +62,6 @@ weeks:
   week-08:
   - tidy-eval
   - separate-unite
-  
-  
   - model-many
   - parse-details
 
