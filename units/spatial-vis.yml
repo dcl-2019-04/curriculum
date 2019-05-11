@@ -11,8 +11,8 @@ desc: "\n## Setup\n\nWe’ll start by reading in a couple of sample data sets, a
   Spatial basics, you learned how to plot spatial data using the\n`plot()` function.
   Now, we’ll show you how to visualize spatial data\nusing `geom_sf()`. The advantage
   of `geom_sf()` is that, as part of\nggplot2, you can layer geoms, use scales functions
-  to change colors,\ntweak your legends, alter the theme, etc.\n\n## `geom_sf()`\n\n`nc_74`
-  contains data on deaths from Sudden Infant Death Syndrome (SIDS)\nin 1974 for counties
+  to change colors,\ntweak your legends, alter the theme, etc.\n\n## `geom_sf()`\n\n`nc_1974`
+  contains data on deaths from Sudden Infant Death Syndrome\n(SIDS) in 1974 for counties
   in North Carolina.\n\n``` r\nnc_1974\n#> Simple feature collection with 100 features
   and 4 fields\n#> geometry type:  MULTIPOLYGON\n#> dimension:      XY\n#> bbox:           xmin:
   -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965\n#> epsg (SRID):    4267\n#>
@@ -52,17 +52,21 @@ desc: "\n## Setup\n\nWe’ll start by reading in a couple of sample data sets, a
   map colors between 0 and 22,000.\n\nOne way to deal with this problem is to cap
   `births`.\n\n``` r\nnc_1974 %>% \n  mutate(births = pmin(births, 1e4)) %>% \n  ggplot(aes(fill
   = births)) +\n  geom_sf()\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-8-1.png)<!--
-  -->\n\n## Layering\n\nWhen you include multiple geospatial layers, ggplot2 will
-  ensure that\nthey all have a common coordinate reference system (CRS) so that it\nmakes
-  sense to overlay them.\n\n``` r\nggplot() +\n  geom_sf(data = states) + \n  geom_sf(data
-  = nc_1974)\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->\n\nIn
-  the above code, we didn’t pipe any data into `ggplot()` because each\nlayer uses
-  different data.\n\nBecause `geom_sf()` is part of ggplot2, you can combine `geom_sf()`
-  with\nother geoms.\n\n``` r\nraleigh <- \n  tibble(\n    x = -78.644257,\n    y
-  = 35.787743,\n    label = \"Raleigh\"\n  )\n\nnc_1974 %>% \n  mutate(births = pmin(births,
-  1e4)) %>% \n  ggplot() +\n  geom_sf(aes(fill = births)) +\n  geom_point(aes(x, y),
-  color = \"red\", data = raleigh) +\n  geom_label(aes(x, y, label = label), nudge_x
-  = 0.8, data = raleigh) +\n  scale_fill_gradient(low = \"#efedf5\", high = \"#756bb1\")\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-10-1.png)<!--
+  -->\n\n## Layering\n\n`states` and `nc_1974` each has a different coordinate reference
+  system\n(CRS).\n\n``` r\nst_crs(states)\n#> Coordinate Reference System:\n#>   EPSG:
+  4326 \n#>   proj4string: \"+proj=longlat +datum=WGS84 +no_defs\"\n\nst_crs(nc_1974)\n#>
+  Coordinate Reference System:\n#>   EPSG: 4267 \n#>   proj4string: \"+proj=longlat
+  +datum=NAD27 +no_defs\"\n```\n\nWhen you include multiple geospatial layers, ggplot2
+  will ensure that\nthey all have a common CRS so that it makes sense to overlay them.
+  It\nwill use the CRS of the first layer for all layers.\n\n``` r\nggplot() +\n  geom_sf(data
+  = states) + \n  geom_sf(data = nc_1974)\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-10-1.png)<!--
+  -->\n\nIn the above code, we didn’t pipe any data into `ggplot()` because each\nlayer
+  uses different data.\n\nBecause `geom_sf()` is part of ggplot2, you can combine
+  `geom_sf()` with\nother geoms.\n\n``` r\nraleigh <- \n  tibble(\n    x = -78.6382,\n
+  \   y = 35.7796,\n    label = \"Raleigh\"\n  )\n\nnc_1974 %>% \n  mutate(births
+  = pmin(births, 1e4)) %>% \n  ggplot() +\n  geom_sf(aes(fill = births)) +\n  geom_point(aes(x,
+  y), color = \"red\", data = raleigh) +\n  geom_label(aes(x, y, label = label), nudge_x
+  = 0.8, data = raleigh) +\n  scale_fill_gradient(low = \"#efedf5\", high = \"#756bb1\")\n```\n\n![](spatial-vis_files/figure-gfm/unnamed-chunk-11-1.png)<!--
   -->\n\nIn this case, the `x` and `y` positions of the Raleigh dot are assumed\nbe
   in the same CRS as the sf object.\n\nYou can find this lighter color scale, and
   many others, at the\n[ColorBrewer website](http://colorbrewer2.org/#).\n\n## `coord_sf()`\n\nYou’ll
@@ -70,22 +74,24 @@ desc: "\n## Setup\n\nWe’ll start by reading in a couple of sample data sets, a
   region of the plot.\n    \n    The following plot shows the SIDS rate by county.\n
   \   \n    ``` r\n    nc_1974 <-\n      nc_1974 %>% \n      mutate(sids_rate = sids
   / births)\n    \n    nc_1974 %>% \n      ggplot(aes(fill = sids_rate)) + \n      geom_sf()\n
-  \   ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-11-1.png)<!--
+  \   ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-12-1.png)<!--
   -->\n    \n    Let’s zoom in on the county with the highest rate (and also change\n
   \   the color scale).\n    \n    ``` r\n    nc_1974 %>% \n      ggplot(aes(fill
   = sids_rate)) + \n      geom_sf() +\n      scale_fill_gradient(low = \"#efedf5\",
   high = \"#756bb1\") +\n      coord_sf(xlim = c(-80.5, -79), ylim = c(34.8, 36))\n
-  \   ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-12-1.png)<!--
+  \   ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-13-1.png)<!--
   -->\n\n  - You can also use `coord_sf()` to override the projection in the\n    data.
   If you don’t specify the `crs` argument to `coord_sf()`, if\n    defaults to the
   CRS given in the data.\n    \n    The CRS for the `states` data is\n    \n    ```
   r\n    states %>% \n      st_crs()\n    #> Coordinate Reference System:\n    #>
   \  EPSG: 4326 \n    #>   proj4string: \"+proj=longlat +datum=WGS84 +no_defs\"\n
   \   ```\n    \n    which produces a map that looks like this:\n    \n    ``` r\n
-  \   states %>% \n      ggplot() +\n      geom_sf()\n    ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-14-1.png)<!--
+  \   states %>% \n      ggplot() +\n      geom_sf()\n    ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-15-1.png)<!--
   -->\n    \n    If you’re visualizing the entire US, it’s better to use the US\n
   \   Albers projection. Albers is an equal-area projection, which means\n    it accurately
-  reflects the areas of geographic regions. The ESPG\n    code of US Albers is 102003.\n
-  \   \n    ``` r\n    states %>% \n      ggplot() +\n      geom_sf() +\n      coord_sf(crs
-  = st_crs(102003))\n    ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-15-1.png)<!--
+  reflects the areas of geographic regions. Below is the\n    proj.4 string for the
+  US Albers projection.\n    \n    ``` r\n    US_ALBERS <- \"+proj=aea +lat_1=29.5
+  +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=WGS84 +no_defs\"\n    \n
+  \   states %>% \n      ggplot() +\n      geom_sf() +\n      coord_sf(crs = US_ALBERS)\n
+  \   ```\n    \n    ![](spatial-vis_files/figure-gfm/unnamed-chunk-16-1.png)<!--
   -->\n"

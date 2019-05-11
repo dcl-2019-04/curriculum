@@ -28,7 +28,7 @@ In Spatial basics, you learned how to plot spatial data using the `plot()` funct
 
 ## `geom_sf()`
 
-`nc_74` contains data on deaths from Sudden Infant Death Syndrome (SIDS) in 1974 for counties in North Carolina.
+`nc_1974` contains data on deaths from Sudden Infant Death Syndrome (SIDS) in 1974 for counties in North Carolina.
 
 ```{r}
 nc_1974
@@ -91,7 +91,15 @@ nc_1974 %>%
 
 ## Layering
 
-When you include multiple geospatial layers, ggplot2 will ensure that they all have a common coordinate reference system (CRS) so that it makes sense to overlay them.
+`states` and `nc_1974` each has a different coordinate reference system (CRS).
+
+```{r}
+st_crs(states)
+
+st_crs(nc_1974)
+```
+
+When you include multiple geospatial layers, ggplot2 will ensure that they all have a common CRS so that it makes sense to overlay them. It will use the CRS of the first layer for all layers.
 
 ```{r}
 ggplot() +
@@ -106,8 +114,8 @@ Because `geom_sf()` is part of ggplot2, you can combine `geom_sf()` with other g
 ```{r}
 raleigh <- 
   tibble(
-    x = -78.644257,
-    y = 35.787743,
+    x = -78.6382,
+    y = 35.7796,
     label = "Raleigh"
   )
 
@@ -169,11 +177,13 @@ You'll need to use `coord_sf()` for two reasons:
       geom_sf()
     ```
   
-    If you're visualizing the entire US, it's better to use the US Albers projection. Albers is an equal-area projection, which means it accurately reflects the areas of geographic regions. The ESPG code of US Albers is 102003.
+    If you're visualizing the entire US, it's better to use the US Albers projection. Albers is an equal-area projection, which means it accurately reflects the areas of geographic regions. Below is the proj.4 string for the US Albers projection.
     
     ```{r}
+    US_ALBERS <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=WGS84 +no_defs"
+    
     states %>% 
       ggplot() +
       geom_sf() +
-      coord_sf(crs = st_crs(102003))
+      coord_sf(crs = US_ALBERS)
     ```
