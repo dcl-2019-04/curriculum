@@ -1,4 +1,4 @@
-cur-week: 07
+cur-week: 08
 
 weeks:
   week-01:
@@ -60,10 +60,10 @@ weeks:
   - purrr-parallel
 
   week-08:
-  - tidy-eval
-  - separate-unite
   - model-many
+  - separate-unite
   - parse-details
+  - tidy-eval
 
   week-09:
   - model-eval
