@@ -7,8 +7,8 @@ title: Many models
 # Many models <small class='model'>[model]</small>
 <small>(Builds on: [Model basics](model-basics.md), [List-columns](list-cols.md))</small>
 
-Instead of using one big, complicated visualisations, it's often better to
-use a sequence of simpler visualisations. The same principle applies with
+Instead of using one big, complicated visualization, it's often better to
+use a sequence of simpler visualizations. The same principle applies with
 modelling: often you can replace a single complex model (which might be
 hard to understand) with a set of simpler models.
 
