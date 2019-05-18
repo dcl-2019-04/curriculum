@@ -34,3 +34,20 @@ id,title,depth,href
 11.1.2,_dfc,3,https://dcl-prog.stanford.edu/purrr-extras.html#dfc
 11.2,Walk,2,https://dcl-prog.stanford.edu/purrr-extras.html#walk
 11.3,Predicate functions,2,https://dcl-prog.stanford.edu/purrr-extras.html#predicate-functions-1
+12,Introduction,1,https://dcl-prog.stanford.edu/tidy-eval-section.html
+13,Summary,1,https://dcl-prog.stanford.edu/tidy-eval-summary.html
+13.1,Passing full expressions with ...,2,https://dcl-prog.stanford.edu/tidy-eval-summary.html#passing-full-expressions-with-...
+13.2,Named arguments,2,https://dcl-prog.stanford.edu/tidy-eval-summary.html#named-arguments
+13.3,Named arguments and any number of additional arguments,2,https://dcl-prog.stanford.edu/tidy-eval-summary.html#named-arguments-and-any-number-of-additional-arguments
+13.4,Assigning names,2,https://dcl-prog.stanford.edu/tidy-eval-summary.html#assigning-names
+13.5,Recoding,2,https://dcl-prog.stanford.edu/tidy-eval-summary.html#recoding
+14,Tidy evaluation,1,https://dcl-prog.stanford.edu/tidy-eval-detailed.html
+14.1,Quoting functions,2,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#quoting-functions
+14.1.1,Quoted arguments,3,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#quoted-arguments
+14.1.2,Strings and glue(),3,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#strings-and-glue
+14.1.3,Quosures,3,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#quosures
+14.2,Wrapping quoting functions,2,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#wrapping-quoting-functions
+14.2.1,enquo() and !!,3,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#enquo-and
+14.2.2,Passing ...,3,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#passing-...
+14.2.3,Assigning names,3,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#assigning-names-1
+14.3,Passing vectors with !!!,2,https://dcl-prog.stanford.edu/tidy-eval-detailed.html#passing-vectors-with
