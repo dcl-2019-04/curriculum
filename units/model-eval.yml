@@ -19,16 +19,17 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   r\n# True function\nf <- function(x) x + 50 * sin((pi / 50) * x)\n```\n\n`f()` is
   the true function, but let’s also assume that any measurements\nof `y` will have
   errors. To simulate errors, we need a function that\nadds random noise to `f()`.
-  We’ll call this function `g()`.\n\n``` r\nset.seed(439)\n\n# Function with measurement
-  error\ng <- function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)\n```\n\nWe
-  can use `g` to generate a random sample of data.\n\n``` r\n# Function that creates
-  a random sample of data points, using g(x)\nsim_data <- function(from, to, by) {\n
-  \ tibble(\n    x = seq(from = from, to = to, by = by),\n    y = g(x)\n  )\n}\n\ndata_1
-  <- sim_data(0, 100, 0.5)\n```\n\nHere’s a plot of both the simulated data (`data_1`),
-  and the true\nfunction. Our job is now to use the simulated data to create a function\nthat
-  hopefully comes close to matching the true function.\n\n``` r\ntibble(x = seq(0,
-  100, 0.5), y = f(x)) %>% \n  ggplot(aes(x, y)) +\n  geom_line() +\n  geom_point(data
-  = data_1) +\n  labs(title = \"True function and simulated data\")\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-5-1.png)<!--
+  We’ll call this function `g()`.\n\n``` r\n# Function with measurement error\ng <-
+  function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)\n```\n\nWe can use `g`
+  to generate a random sample of data.\n\n``` r\n# Function that generates a random
+  sample of data points, using g(x)\nsim_data <- function(from, to, by) {\n  tibble(\n
+  \   x = seq(from = from, to = to, by = by),\n    y = g(x)\n  )\n}\n\n# Generate
+  random sample of points to approximate\nset.seed(439)\ndata_1 <- sim_data(0, 100,
+  0.5)\n```\n\nHere’s a plot of both the simulated data (`data_1`), and the true\nfunction.
+  Our job is now to use the simulated data to create a function\nthat closely approximates
+  the true function.\n\n``` r\ntibble(x = seq(0, 100, 0.5), y = f(x)) %>% \n  ggplot(aes(x,
+  y)) +\n  geom_line() +\n  geom_point(data = data_1) +\n  labs(title = \"True function
+  and simulated data\")\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-5-1.png)<!--
   -->\n\n## The `loess()` model\n\nGiven the shape of our data, the `stats::loess()`
   function is a good\nplace to start. `loess()` works by creating a local model at
   each data\npoint. Each of these local models only uses data within a given distance\nfrom
@@ -246,10 +247,10 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   only know the CV\nerrors:\n\n  - Start with the parameter that has the lowest mean
   CV error. In this\n    case, that would be `span` = 0.25 (on the plot, `1/span`
   = 4).\n  - Now, imagine sliding the one-standard-error range for `span` = 0.25\n
-  \   all the way to the left of the plot. Now, start sliding the range to\n    the
-  right until the first CV mean error is within its bounds. In our\n    case, the
-  top of the one-standard-error range for `span` = 0.25 is\n    approximately 20.6.
-  The CV mean error for `span` = 1 is larger than\n    this, but the next most complex
+  \   all the way to the left of the plot. Then, start sliding the range\n    to the
+  right until the first CV mean error is within its bounds. In\n    our case, the
+  top of the one-standard-error range for `span` = 0.25\n    is approximately 20.6.
+  The CV mean error for `span` = 1 is larger\n    than this, but the next most complex
   model with `span` ≈ 0.871 is\n    smaller, so we would choose this `span`.\n\nWe
   saw above that if we knew the test error, we would choose `span` ≈\n0.758 as the
   optimal parameter. But we usually don’t know the test\nerror, and in this case the

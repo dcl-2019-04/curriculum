@@ -47,8 +47,6 @@ of `y` will have errors. To simulate errors, we need a function that
 adds random noise to `f()`. We’ll call this function `g()`.
 
 ``` r
-set.seed(439)
-
 # Function with measurement error
 g <- function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)
 ```
@@ -56,7 +54,7 @@ g <- function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)
 We can use `g` to generate a random sample of data.
 
 ``` r
-# Function that creates a random sample of data points, using g(x)
+# Function that generates a random sample of data points, using g(x)
 sim_data <- function(from, to, by) {
   tibble(
     x = seq(from = from, to = to, by = by),
@@ -64,12 +62,14 @@ sim_data <- function(from, to, by) {
   )
 }
 
+# Generate random sample of points to approximate
+set.seed(439)
 data_1 <- sim_data(0, 100, 0.5)
 ```
 
 Here’s a plot of both the simulated data (`data_1`), and the true
 function. Our job is now to use the simulated data to create a function
-that hopefully comes close to matching the true function.
+that closely approximates the true function.
 
 ``` r
 tibble(x = seq(0, 100, 0.5), y = f(x)) %>% 
@@ -626,11 +626,11 @@ errors:
   - Start with the parameter that has the lowest mean CV error. In this
     case, that would be `span` = 0.25 (on the plot, `1/span` = 4).
   - Now, imagine sliding the one-standard-error range for `span` = 0.25
-    all the way to the left of the plot. Now, start sliding the range to
-    the right until the first CV mean error is within its bounds. In our
-    case, the top of the one-standard-error range for `span` = 0.25 is
-    approximately 20.6. The CV mean error for `span` = 1 is larger than
-    this, but the next most complex model with `span` ≈ 0.871 is
+    all the way to the left of the plot. Then, start sliding the range
+    to the right until the first CV mean error is within its bounds. In
+    our case, the top of the one-standard-error range for `span` = 0.25
+    is approximately 20.6. The CV mean error for `span` = 1 is larger
+    than this, but the next most complex model with `span` ≈ 0.871 is
     smaller, so we would choose this `span`.
 
 We saw above that if we knew the test error, we would choose `span` ≈
