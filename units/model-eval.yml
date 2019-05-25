@@ -20,9 +20,9 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   the true function, but let’s also assume that any measurements\nof `y` will have
   errors. To simulate errors, we need a function that\nadds random noise to `f()`.
   We’ll call this function `g()`.\n\n``` r\n# Function with measurement error\ng <-
-  function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)\n```\n\nWe can use `g`
+  function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)\n```\n\nWe can use `g()`
   to generate a random sample of data.\n\n``` r\n# Function that generates a random
-  sample of data points, using g(x)\nsim_data <- function(from, to, by) {\n  tibble(\n
+  sample of data points, using g()\nsim_data <- function(from, to, by) {\n  tibble(\n
   \   x = seq(from = from, to = to, by = by),\n    y = g(x)\n  )\n}\n\n# Generate
   random sample of points to approximate\nset.seed(439)\ndata_1 <- sim_data(0, 100,
   0.5)\n```\n\nHere’s a plot of both the simulated data (`data_1`), and the true\nfunction.

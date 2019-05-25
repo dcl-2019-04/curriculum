@@ -51,10 +51,10 @@ adds random noise to `f()`. We’ll call this function `g()`.
 g <- function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)
 ```
 
-We can use `g` to generate a random sample of data.
+We can use `g()` to generate a random sample of data.
 
 ``` r
-# Function that generates a random sample of data points, using g(x)
+# Function that generates a random sample of data points, using g()
 sim_data <- function(from, to, by) {
   tibble(
     x = seq(from = from, to = to, by = by),
