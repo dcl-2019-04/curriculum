@@ -13,26 +13,26 @@ library(tidyverse)
 library(modelr)
 ```
 
-A crucial part of the modeling process is determining the quality of your model. Often, you'll want to compare different models to each other to figure out which one fits your data the best. In this reading, we'll explore how to compare different models to each other and pick the highest quality one.
+A crucial part of the modeling process is determining the quality of your model. In this reading, we'll explore how to compare different models to each other and pick the one that best approximates your data.
 
 ## The problem
 
-In order to illustrate the process of model evaluation, we're going to use simulated data. To simulate data, you pick a function and use that function to generate a series of data points. The advantage of using simulated data is therefore that we actually know the functional representation of the data, since we were the ones to create the data. We can then compare any models we make to the true function. 
+In order to illustrate the process of model evaluation, we're going to use simulated data. To simulate data, you pick a function and use that function to generate a series of data points. We can then compare any models we make to the true function used to generate the data.
 
-Note that you almost always won't actually know the functional representation of your data. If you did, you probably wouldn't need a model in the first place. 
+Note that you almost always won't actually know the functional representation underlying your data. If you did, you probably wouldn't need a model in the first place. 
 
 For our simulated data, let's assume there's some phenomenon that has a functional representation of the form
 
-$$y = f(x)$$
+    y = f(x)
 
-In other words, the phenomenon is purely a function of the variable `x`, and so, if you know `x`, you can figure out the behavior of the phenomenon. Here's the $f$ that we'll use in this reading.
+In other words, the phenomenon is purely a function of the variable `x`, and so, if you know `x`, you can figure out the behavior of the phenomenon. Here's the function `f()` that we'll use.
 
 ```{r}
 # True function
 f <- function(x) x + 50 * sin((pi / 50) * x)
 ```
 
-$f$ is the true function, but let's also assume that any measurements of $y$ will have errors. To simulate errors, we need a function that adds random noise to $f$. We'll call this function $g$. 
+`f()` is the true function, but let's also assume that any measurements of `y` will have errors. To simulate errors, we need a function that adds random noise to `f()`. We'll call this function `g()`. 
 
 ```{r}
 set.seed(439)
@@ -41,7 +41,7 @@ set.seed(439)
 g <- function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)
 ```
 
-We can use $g$ to generate a random sample of data.
+We can use `g` to generate a random sample of data.
 
 ```{r}
 # Function that creates a random sample of data points, using g(x)
@@ -67,7 +67,7 @@ tibble(x = seq(0, 100, 0.5), y = f(x)) %>%
 
 ## The `loess()` model
 
-Given the shape of our data, the `stats::loess()` function is a good place to start. `loess()` works by by creating a local model at each data point. Each of these local models only uses data within a given distance from that point. The `span` parameter controls how many points are included in each of these local models. The smaller the span, the fewer the number of points included in each local model. 
+Given the shape of our data, the `stats::loess()` function is a good place to start. `loess()` works by creating a local model at each data point. Each of these local models only uses data within a given distance from that point. The `span` parameter controls how many points are included in each of these local models. The smaller the span, the fewer the number of points included in each local model. 
 
 To better understand the effect of the `span` parameter, let's plot `loess()` models with different values of `span`. 
 
@@ -84,7 +84,7 @@ plot_loess <- function(span) {
     geom_point(aes(y = y)) +
     geom_line(aes(y = pred), color = "#3366FF", size = 1) +
     labs(
-      title = str_c("loess, span = ", span),
+      title = str_glue("loess, span = {span}"),
       y = "y"
     )
 }
@@ -198,17 +198,17 @@ Mapping 1 / `span` to the x-axis makes the plot easier to interpret because smal
 
 The lowest test error is around 20.18, and came from the model with `span` ≈ 0.758. Note that the default value of `span` in `loess()` is 0.75, so the default here would have done pretty well. 
 
-You can see that as the model increases in complexity, the training error (blue line) continually declines, but the test error (green line) actually starts to increase. The point of divergence indicates the `span` values at which the model becomes too complex and starts overfitting the training data.
+You can see that as the model increases in complexity, the training error (blue line) continually declines, but the test error (green line) actually starts to increase. The test error increases for values of `span` that make the model too complex overfit the training data.
 
 We used `data_50`, our new data, to calculate the actual test error. As we've said, though, you usually won't have access to new data and so won't be able to calculate the test error. You'll need a way to estimate the test error using the training data. As our plot indicates, however, the training error is a poor estimate of the actual test error. In the next section, we'll discuss a better way, called _cross-validation_, to estimate the test error from the training data. 
 
 ## Cross-validation
 
-There are two key ideas of cross-validation. First, in the absence of new data, we can hold out of a random portion of our original data (the test set), train the model on the rest of the data (the training set), and then test the model on test set. Second, we can generate multiple of these train-test pairs to create a more robust estimate of the true test error. 
+There are two key ideas of cross-validation. First, in the absence of new data, we can hold out of a random portion of our original data (the test set), train the model on the rest of the data (the training set), and then test the model on test set. Second, we can generate multiple train-test pairs to create a more robust estimate of the true test error. 
 
 modelr provides two functions for generating these train-test pairs: `crossv_mc()` and `crossv_kfold()`. We'll introduce these functions in the next section. 
 
-### `crossv_mc()` and `crossv_kfold()`
+### Generating train-test paires with `crossv_mc()` and `crossv_kfold()`
 
 `crossv_mc()` and `crossv_kfold()` both take your original data as input and produce a tibble that looks like this:
 
@@ -228,6 +228,8 @@ Each row represents one train-test pair. Eventually, we're going to build a mode
 Now, let's take a closer look at how these functions works. The following code uses `crossv_kfold()` to create 10 train-test pairs.  
 
 ```{r}
+set.seed(122)
+
 df <- 
   data_1 %>% 
   crossv_kfold(k = 10)
@@ -235,48 +237,50 @@ df <-
 df
 ```
 
-The result is a tibble with two list-columns:  `train` and `test`. Each element of `train` and `test` is a resample object, which you might not have seen before. Let's pull out a single resample object and inspect it.
+The result is a tibble with two list-columns:  `train` and `test`. Each element of `train` and `test` is a resample object, which you might not have seen before. Let's look at the first row, the first train-test pair.
 
 ```{r}
-resample_1 <- df$train[[1]]
-resample_1
+train_01 <- df$train[[1]]
+train_01
+
+test_01 <- df$test[[1]]
+test_01
 ```
 
 Each resample object is actually a two-element list. 
 
 ```{r}
-length(resample_1)
+length(train_01)
 ```
 
 The first element, `data` is the original dataset.
 
 ```{r}
-resample_1$data
+train_01$data
 ```
 
 The second element, `idx`, is a set of indices that indicate the subset of the original data to use.
 
 ```{r}
-indices <- resample_1$idx
-head(indices)
+train_01$idx
 ```
 
 We can use a set operation to verify that the train and test sets are mutually exclusive. In other words, there is no point in a given train set that is also in its corresponding test set, and vice versa.
 
 ```{r}
-is_empty(intersect(df$train[[1]]$idx, df$test[[1]]$idx))
+is_empty(intersect(train_01$idx, test_01$idx))
 ```
 
 The union of each train and test set is just the complete original dataset. We can verify this by checking that the set of all train and test indices contains every possible index in the original dataset.
 
 ```{r}
-setequal(union(df$train[[1]]$idx, df$test[[1]]$idx),  1:201)
+setequal(union(train_01$idx, test_01$idx),  1:201)
 ```
 
 resample objects are not tibbles. Some model functions, like `lm()`, can take resample objects as input, but `loess()` cannot. In order to use `loess()`, we'll need to turn the resample objects into tibbles. 
 
 ```{r}
-as_tibble(df$test[[1]])
+as_tibble(test_01)
 ```
 
 Resample objects waste a lot of space, since each one contains the full dataset. A new package [rsample](https://topepo.github.io/rsample/) is being developed to support tidy modeling in a more space-efficient way.

@@ -4,47 +4,44 @@ needs: model-multivariate
 readings: ~
 updated: ~
 desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of the
-  modeling process is determining the quality of\nyour model. Often, you’ll want to
-  compare different models to each other\nto figure out which one fits your data the
-  best. In this reading, we’ll\nexplore how to compare different models to each other
-  and pick the\nhighest quality one.\n\n## The problem\n\nIn order to illustrate the
-  process of model evaluation, we’re going to\nuse simulated data. To simulate data,
-  you pick a function and use that\nfunction to generate a series of data points.
-  The advantage of using\nsimulated data is therefore that we actually know the functional\nrepresentation
-  of the data, since we were the ones to create the data.\nWe can then compare any
-  models we make to the true function.\n\nNote that you almost always won’t actually
-  know the functional\nrepresentation of your data. If you did, you probably wouldn’t
-  need a\nmodel in the first place.\n\nFor our simulated data, let’s assume there’s
-  some phenomenon that has a\nfunctional representation of the form\n\n\\[y = f(x)\\]\n\nIn
-  other words, the phenomenon is purely a function of the variable `x`,\nand so, if
-  you know `x`, you can figure out the behavior of the\nphenomenon. Here’s the \\(f\\)
-  that we’ll use in this reading.\n\n``` r\n# True function\nf <- function(x) x +
-  50 * sin((pi / 50) * x)\n```\n\n\\(f\\) is the true function, but let’s also assume
-  that any measurements\nof \\(y\\) will have errors. To simulate errors, we need
-  a function that\nadds random noise to \\(f\\). We’ll call this function \\(g\\).\n\n```
-  r\nset.seed(439)\n\n# Function with measurement error\ng <- function(x) f(x) + rnorm(n
-  = length(x), mean = 0, sd = 20)\n```\n\nWe can use \\(g\\) to generate a random
-  sample of data.\n\n``` r\n# Function that creates a random sample of data points,
-  using g(x)\nsim_data <- function(from, to, by) {\n  tibble(\n    x = seq(from =
-  from, to = to, by = by),\n    y = g(x)\n  )\n}\n\ndata_1 <- sim_data(0, 100, 0.5)\n```\n\nHere’s
-  a plot of both the simulated data (`data_1`), and the true\nfunction. Our job is
-  now to use the simulated data to create a function\nthat hopefully comes close to
-  matching the true function.\n\n``` r\ntibble(x = seq(0, 100, 0.5), y = f(x)) %>%
-  \n  ggplot(aes(x, y)) +\n  geom_line() +\n  geom_point(data = data_1) +\n  labs(title
-  = \"True function and simulated data\")\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-5-1.png)<!--
+  modeling process is determining the quality of\nyour model. In this reading, we’ll
+  explore how to compare different\nmodels to each other and pick the one that best
+  approximates your data.\n\n## The problem\n\nIn order to illustrate the process
+  of model evaluation, we’re going to\nuse simulated data. To simulate data, you pick
+  a function and use that\nfunction to generate a series of data points. We can then
+  compare any\nmodels we make to the true function used to generate the data.\n\nNote
+  that you almost always won’t actually know the functional\nrepresentation underlying
+  your data. If you did, you probably wouldn’t\nneed a model in the first place.\n\nFor
+  our simulated data, let’s assume there’s some phenomenon that has a\nfunctional
+  representation of the form\n\n    y = f(x)\n\nIn other words, the phenomenon is
+  purely a function of the variable `x`,\nand so, if you know `x`, you can figure
+  out the behavior of the\nphenomenon. Here’s the function `f()` that we’ll use.\n\n```
+  r\n# True function\nf <- function(x) x + 50 * sin((pi / 50) * x)\n```\n\n`f()` is
+  the true function, but let’s also assume that any measurements\nof `y` will have
+  errors. To simulate errors, we need a function that\nadds random noise to `f()`.
+  We’ll call this function `g()`.\n\n``` r\nset.seed(439)\n\n# Function with measurement
+  error\ng <- function(x) f(x) + rnorm(n = length(x), mean = 0, sd = 20)\n```\n\nWe
+  can use `g` to generate a random sample of data.\n\n``` r\n# Function that creates
+  a random sample of data points, using g(x)\nsim_data <- function(from, to, by) {\n
+  \ tibble(\n    x = seq(from = from, to = to, by = by),\n    y = g(x)\n  )\n}\n\ndata_1
+  <- sim_data(0, 100, 0.5)\n```\n\nHere’s a plot of both the simulated data (`data_1`),
+  and the true\nfunction. Our job is now to use the simulated data to create a function\nthat
+  hopefully comes close to matching the true function.\n\n``` r\ntibble(x = seq(0,
+  100, 0.5), y = f(x)) %>% \n  ggplot(aes(x, y)) +\n  geom_line() +\n  geom_point(data
+  = data_1) +\n  labs(title = \"True function and simulated data\")\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-5-1.png)<!--
   -->\n\n## The `loess()` model\n\nGiven the shape of our data, the `stats::loess()`
-  function is a good\nplace to start. `loess()` works by by creating a local model
-  at each\ndata point. Each of these local models only uses data within a given\ndistance
-  from that point. The `span` parameter controls how many points\nare included in
-  each of these local models. The smaller the span, the\nfewer the number of points
-  included in each local model.\n\nTo better understand the effect of the `span` parameter,
+  function is a good\nplace to start. `loess()` works by creating a local model at
+  each data\npoint. Each of these local models only uses data within a given distance\nfrom
+  that point. The `span` parameter controls how many points are\nincluded in each
+  of these local models. The smaller the span, the fewer\nthe number of points included
+  in each local model.\n\nTo better understand the effect of the `span` parameter,
   let’s plot\n`loess()` models with different values of `span`.\n\nThe function `plot_loess()`
   fits a model using `loess()`, then plots the\nmodel predictions and the underlying
   data.\n\n``` r\n# Plot loess model for given span\nplot_loess <- function(span)
   {\n  data_1 %>% \n    mutate(f = f(x)) %>% \n    add_predictions(loess(y ~ x, data
   = data_1, span = span)) %>% \n    ggplot(aes(x)) +\n    geom_line(aes(y = f)) +\n
   \   geom_point(aes(y = y)) +\n    geom_line(aes(y = pred), color = \"#3366FF\",
-  size = 1) +\n    labs(\n      title = str_c(\"loess, span = \", span),\n      y
+  size = 1) +\n    labs(\n      title = str_glue(\"loess, span = {span}\"),\n      y
   = \"y\"\n    )\n}\n```\n\nNow, we can use purrr to apply `plot_loess()` to a vector
   of different\nspan values.\n\n``` r\nc(10, 1, 0.75, 0.1, 0.01) %>% \n  map(plot_loess)
   %>% \n  walk(print)\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-7-1.png)<!--
@@ -116,75 +113,86 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   the default value of `span` in `loess()` is\n0.75, so the default here would have
   done pretty well.\n\nYou can see that as the model increases in complexity, the
   training\nerror (blue line) continually declines, but the test error (green line)\nactually
-  starts to increase. The point of divergence indicates the\n`span` values at which
-  the model becomes too complex and starts\noverfitting the training data.\n\nWe used
-  `data_50`, our new data, to calculate the actual test error. As\nwe’ve said, though,
-  you usually won’t have access to new data and so\nwon’t be able to calculate the
-  test error. You’ll need a way to\nestimate the test error using the training data.
-  As our plot indicates,\nhowever, the training error is a poor estimate of the actual
-  test error.\nIn the next section, we’ll discuss a better way, called\n*cross-validation*,
-  to estimate the test error from the training data.\n\n## Cross-validation\n\nThere
-  are two key ideas of cross-validation. First, in the absence of\nnew data, we can
-  hold out of a random portion of our original data (the\ntest set), train the model
-  on the rest of the data (the training set),\nand then test the model on test set.
-  Second, we can generate multiple of\nthese train-test pairs to create a more robust
-  estimate of the true test\nerror.\n\nmodelr provides two functions for generating
-  these train-test pairs:\n`crossv_mc()` and `crossv_kfold()`. We’ll introduce these
-  functions in\nthe next section.\n\n### `crossv_mc()` and `crossv_kfold()`\n\n`crossv_mc()`
-  and `crossv_kfold()` both take your original data as input\nand produce a tibble
-  that looks like this:\n\n``` r\ndata_1 %>% \n  crossv_kfold()\n```\n\n    ## # A
-  tibble: 5 x 3\n    ##   train          test           .id  \n    ##   <list>         <list>
-  \        <chr>\n    ## 1 <S3: resample> <S3: resample> 1    \n    ## 2 <S3: resample>
-  <S3: resample> 2    \n    ## 3 <S3: resample> <S3: resample> 3    \n    ## 4 <S3:
-  resample> <S3: resample> 4    \n    ## 5 <S3: resample> <S3: resample> 5\n\nEach
-  row represents one train-test pair. Eventually, we’re going to\nbuild a model on
-  each train portion, and then test that model on each\ntest portion.\n\n`crossv_mc()`
-  and `crossv_kfold()` differ in how they generate the\ntrain-test pairs.\n\n`crossv_mc()`
-  takes two parameters: `n` and `test`. `n` specifies how\nmany train-test pairs to
-  generate. `test` specifies the portion of the\ndata to hold out each time. Importantly,
-  `crossv_mc()` pulls randomly\nfrom the entire dataset to create each train-test
-  split. This means that\nthe test sets are not mutually exclusive. A single point
-  can be present\nin multiple test sets.\n\n`crossv_kfold()` takes one parameter:
-  `k`, and splits the data into `k`\nexclusive partitions, or *folds*. It then uses
-  each of these `k` folds\nas a test set, with the remaining `k` - 1 folds as the
-  training set. The\nmain difference between `crossv_mc()` and `crossv_kfold()` is
-  that the\n`crossv_kfold()` test sets are mutually exclusive.\n\nNow, let’s take
-  a closer look at how these functions works. The\nfollowing code uses `crossv_kfold()`
-  to create 10 train-test pairs.\n\n``` r\ndf <- \n  data_1 %>% \n  crossv_kfold(k
-  = 10)\n\ndf\n```\n\n    ## # A tibble: 10 x 3\n    ##    train          test           .id
-  \ \n    ##    <list>         <list>         <chr>\n    ##  1 <S3: resample> <S3:
-  resample> 01   \n    ##  2 <S3: resample> <S3: resample> 02   \n    ##  3 <S3: resample>
-  <S3: resample> 03   \n    ##  4 <S3: resample> <S3: resample> 04   \n    ##  5 <S3:
-  resample> <S3: resample> 05   \n    ##  6 <S3: resample> <S3: resample> 06   \n
-  \   ##  7 <S3: resample> <S3: resample> 07   \n    ##  8 <S3: resample> <S3: resample>
-  08   \n    ##  9 <S3: resample> <S3: resample> 09   \n    ## 10 <S3: resample> <S3:
-  resample> 10\n\nThe result is a tibble with two list-columns: `train` and `test`.
-  Each\nelement of `train` and `test` is a resample object, which you might not\nhave
-  seen before. Let’s pull out a single resample object and inspect\nit.\n\n``` r\nresample_1
-  <- df$train[[1]]\nresample_1\n```\n\n    ## <resample [180 x 2]> 1, 3, 4, 5, 6,
-  7, 8, 9, 10, 11, ...\n\nEach resample object is actually a two-element list.\n\n```
-  r\nlength(resample_1)\n```\n\n    ## [1] 2\n\nThe first element, `data` is the original
-  dataset.\n\n``` r\nresample_1$data\n```\n\n    ## # A tibble: 201 x 2\n    ##        x
+  starts to increase. The test error increases for values of\n`span` that make the
+  model too complex overfit the training data.\n\nWe used `data_50`, our new data,
+  to calculate the actual test error. As\nwe’ve said, though, you usually won’t have
+  access to new data and so\nwon’t be able to calculate the test error. You’ll need
+  a way to\nestimate the test error using the training data. As our plot indicates,\nhowever,
+  the training error is a poor estimate of the actual test error.\nIn the next section,
+  we’ll discuss a better way, called\n*cross-validation*, to estimate the test error
+  from the training data.\n\n## Cross-validation\n\nThere are two key ideas of cross-validation.
+  First, in the absence of\nnew data, we can hold out of a random portion of our original
+  data (the\ntest set), train the model on the rest of the data (the training set),\nand
+  then test the model on test set. Second, we can generate multiple\ntrain-test pairs
+  to create a more robust estimate of the true test\nerror.\n\nmodelr provides two
+  functions for generating these train-test pairs:\n`crossv_mc()` and `crossv_kfold()`.
+  We’ll introduce these functions in\nthe next section.\n\n### Generating train-test
+  paires with `crossv_mc()` and `crossv_kfold()`\n\n`crossv_mc()` and `crossv_kfold()`
+  both take your original data as input\nand produce a tibble that looks like this:\n\n```
+  r\ndata_1 %>% \n  crossv_kfold()\n```\n\n    ## # A tibble: 5 x 3\n    ##   train
+  \         test           .id  \n    ##   <list>         <list>         <chr>\n    ##
+  1 <S3: resample> <S3: resample> 1    \n    ## 2 <S3: resample> <S3: resample> 2
+  \   \n    ## 3 <S3: resample> <S3: resample> 3    \n    ## 4 <S3: resample> <S3:
+  resample> 4    \n    ## 5 <S3: resample> <S3: resample> 5\n\nEach row represents
+  one train-test pair. Eventually, we’re going to\nbuild a model on each train portion,
+  and then test that model on each\ntest portion.\n\n`crossv_mc()` and `crossv_kfold()`
+  differ in how they generate the\ntrain-test pairs.\n\n`crossv_mc()` takes two parameters:
+  `n` and `test`. `n` specifies how\nmany train-test pairs to generate. `test` specifies
+  the portion of the\ndata to hold out each time. Importantly, `crossv_mc()` pulls
+  randomly\nfrom the entire dataset to create each train-test split. This means that\nthe
+  test sets are not mutually exclusive. A single point can be present\nin multiple
+  test sets.\n\n`crossv_kfold()` takes one parameter: `k`, and splits the data into
+  `k`\nexclusive partitions, or *folds*. It then uses each of these `k` folds\nas
+  a test set, with the remaining `k` - 1 folds as the training set. The\nmain difference
+  between `crossv_mc()` and `crossv_kfold()` is that the\n`crossv_kfold()` test sets
+  are mutually exclusive.\n\nNow, let’s take a closer look at how these functions
+  works. The\nfollowing code uses `crossv_kfold()` to create 10 train-test pairs.\n\n```
+  r\nset.seed(122)\n\ndf <- \n  data_1 %>% \n  crossv_kfold(k = 10)\n\ndf\n```\n\n
+  \   ## # A tibble: 10 x 3\n    ##    train          test           .id  \n    ##
+  \   <list>         <list>         <chr>\n    ##  1 <S3: resample> <S3: resample>
+  01   \n    ##  2 <S3: resample> <S3: resample> 02   \n    ##  3 <S3: resample> <S3:
+  resample> 03   \n    ##  4 <S3: resample> <S3: resample> 04   \n    ##  5 <S3: resample>
+  <S3: resample> 05   \n    ##  6 <S3: resample> <S3: resample> 06   \n    ##  7 <S3:
+  resample> <S3: resample> 07   \n    ##  8 <S3: resample> <S3: resample> 08   \n
+  \   ##  9 <S3: resample> <S3: resample> 09   \n    ## 10 <S3: resample> <S3: resample>
+  10\n\nThe result is a tibble with two list-columns: `train` and `test`. Each\nelement
+  of `train` and `test` is a resample object, which you might not\nhave seen before.
+  Let’s look at the first row, the first train-test\npair.\n\n``` r\ntrain_01 <- df$train[[1]]\ntrain_01\n```\n\n
+  \   ## <resample [180 x 2]> 1, 3, 4, 5, 6, 7, 9, 10, 11, 12, ...\n\n``` r\ntest_01
+  <- df$test[[1]]\ntest_01\n```\n\n    ## <resample [21 x 2]> 2, 8, 21, 43, 53, 63,
+  78, 81, 85, 101, ...\n\nEach resample object is actually a two-element list.\n\n```
+  r\nlength(train_01)\n```\n\n    ## [1] 2\n\nThe first element, `data` is the original
+  dataset.\n\n``` r\ntrain_01$data\n```\n\n    ## # A tibble: 201 x 2\n    ##        x
   \     y\n    ##    <dbl>  <dbl>\n    ##  1   0    22.9 \n    ##  2   0.5  36.6 \n
   \   ##  3   1    -2.32\n    ##  4   1.5  21.3 \n    ##  5   2    18.9 \n    ##  6
   \  2.5  13.0 \n    ##  7   3   -18.3 \n    ##  8   3.5  18.5 \n    ##  9   4    29.0
   \n    ## 10   4.5   9.73\n    ## # … with 191 more rows\n\nThe second element, `idx`,
   is a set of indices that indicate the subset\nof the original data to use.\n\n```
-  r\nindices <- resample_1$idx\nhead(indices)\n```\n\n    ## [1] 1 3 4 5 6 7\n\nWe
+  r\ntrain_01$idx\n```\n\n    ##   [1]   1   3   4   5   6   7   9  10  11  12  13
+  \ 14  15  16  17  18  19\n    ##  [18]  20  22  23  24  25  26  27  28  29  30  31
+  \ 32  33  34  35  36  37\n    ##  [35]  38  39  40  41  42  44  45  46  47  48  49
+  \ 50  51  52  54  55  56\n    ##  [52]  57  58  59  60  61  62  64  65  66  67  68
+  \ 69  70  71  72  73  74\n    ##  [69]  75  76  77  79  80  82  83  84  86  87  88
+  \ 89  90  91  92  93  94\n    ##  [86]  95  96  97  98  99 100 102 103 104 105 106
+  107 108 109 111 112 114\n    ## [103] 115 116 117 118 119 121 122 123 124 125 126
+  127 128 130 131 132 133\n    ## [120] 134 135 136 137 138 139 140 142 143 144 145
+  147 148 150 151 153 154\n    ## [137] 155 156 157 158 159 162 163 164 165 166 167
+  168 169 170 171 172 173\n    ## [154] 174 175 176 177 178 179 180 182 183 184 185
+  186 187 188 189 190 191\n    ## [171] 192 193 194 195 196 197 198 199 200 201\n\nWe
   can use a set operation to verify that the train and test sets are\nmutually exclusive.
   In other words, there is no point in a given train\nset that is also in its corresponding
-  test set, and vice versa.\n\n``` r\nis_empty(intersect(df$train[[1]]$idx, df$test[[1]]$idx))\n```\n\n
+  test set, and vice versa.\n\n``` r\nis_empty(intersect(train_01$idx, test_01$idx))\n```\n\n
   \   ## [1] TRUE\n\nThe union of each train and test set is just the complete original\ndataset.
   We can verify this by checking that the set of all train and\ntest indices contains
-  every possible index in the original dataset.\n\n``` r\nsetequal(union(df$train[[1]]$idx,
-  df$test[[1]]$idx),  1:201)\n```\n\n    ## [1] TRUE\n\nresample objects are not tibbles.
+  every possible index in the original dataset.\n\n``` r\nsetequal(union(train_01$idx,
+  test_01$idx),  1:201)\n```\n\n    ## [1] TRUE\n\nresample objects are not tibbles.
   Some model functions, like `lm()`, can\ntake resample objects as input, but `loess()`
   cannot. In order to use\n`loess()`, we’ll need to turn the resample objects into
-  tibbles.\n\n``` r\nas_tibble(df$test[[1]])\n```\n\n    ## # A tibble: 21 x 2\n    ##
-  \       x     y\n    ##    <dbl> <dbl>\n    ##  1   0.5  36.6\n    ##  2  15    82.6\n
-  \   ##  3  20.5  82.3\n    ##  4  21    79.3\n    ##  5  27.5  98.3\n    ##  6  30
-  \   80.2\n    ##  7  35.5 102. \n    ##  8  37    67.1\n    ##  9  39    79.0\n
-  \   ## 10  41    41.3\n    ## # … with 11 more rows\n\nResample objects waste a
+  tibbles.\n\n``` r\nas_tibble(test_01)\n```\n\n    ## # A tibble: 21 x 2\n    ##
+  \       x     y\n    ##    <dbl> <dbl>\n    ##  1   0.5  36.6\n    ##  2   3.5  18.5\n
+  \   ##  3  10    26.8\n    ##  4  21    79.3\n    ##  5  26    68.5\n    ##  6  31
+  \  102. \n    ##  7  38.5  76.4\n    ##  8  40    73.6\n    ##  9  42    37.1\n
+  \   ## 10  50    40.5\n    ## # … with 11 more rows\n\nResample objects waste a
   lot of space, since each one contains the full\ndataset. A new package [rsample](https://topepo.github.io/rsample/)
   is\nbeing developed to support tidy modeling in a more space-efficient way.\n\n###
   Process\n\n`crossv_kfold()` and `crossv_mc()` just generate train-test pairs. In\norder
