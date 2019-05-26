@@ -97,16 +97,18 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   \      20.3\n    ## 11 0.5          18.4       20.3\n    ## 12 0.435        18.3
   \      20.4\n    ## 13 0.379        18.1       20.4\n    ## 14 0.330        17.8
   \      20.4\n    ## 15 0.287        17.4       20.6\n    ## 16 0.25         17.2
-  \      20.8\n\nIt would be useful to compare these errors to the Bayes error, which
-  you\ncan think of as the “best-case-scenario” error. The following code\ncalculates
-  the Bayes error from `data_50`.\n\n``` r\nbayes_error <- \n  data_50 %>% \n  summarize(bayes_error
-  = sqrt(mean((y - f(x))^2, na.rm = TRUE))) %>% \n  pull(bayes_error)\n\nbayes_error
-  \n```\n\n    ## [1] 19.9741\n\nNow, let’s plot the training, test, and Bayes errors
-  by `span`.\n\n``` r\nbayes <- tibble(\n  span = range(errors$span),\n  type = \"bayes_error\",\n
-  \ error = bayes_error\n)\n\nerrors %>% \n  gather(key = type, value = error, -span)
-  %>% \n  ggplot(aes(1 / span, error, color = type)) + \n  geom_line(data = bayes)
-  +\n  geom_line() +\n  geom_point() +\n  labs(\n    title = \"Errors as a function
-  of increasing model complexity\",\n    color = NULL\n  )\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-13-1.png)<!--
+  \      20.8\n\nIt would be useful to compare these errors to the Bayes error, the
+  error\non the true function, which you can think of as the “best-case-scenario”\nerror.
+  The RMSE Bayes error is 20, the standard deviation of the random\nerrors added by
+  `g()`. We can check this with an approximation using\n`data_50`.\n\n``` r\nbayes_error
+  <- 20\n \ndata_50 %>% \n  summarize(bayes_error = sqrt(mean((y - f(x))^2, na.rm
+  = TRUE))) %>% \n  pull(bayes_error)\n```\n\n    ## [1] 19.9741\n\nNow, let’s plot
+  the training, test, and Bayes errors by `span`.\n\n``` r\nbayes <- tibble(\n  span
+  = range(errors$span),\n  type = \"bayes_error\",\n  error = bayes_error\n)\n\nerrors
+  %>% \n  gather(key = type, value = error, -span) %>% \n  ggplot(aes(1 / span, error,
+  color = type)) + \n  geom_line(data = bayes) +\n  geom_line() +\n  geom_point()
+  +\n  labs(\n    title = \"Errors as a function of increasing model complexity\",\n
+  \   color = NULL\n  )\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-13-1.png)<!--
   -->\n\nMapping 1 / `span` to the x-axis makes the plot easier to interpret\nbecause
   smaller values of `span` create more complex models. The\nleftmost points indicate
   the simplest models, and the rightmost indicate\nthe most complex.\n\nThe lowest

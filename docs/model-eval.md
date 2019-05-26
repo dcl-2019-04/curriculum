@@ -238,17 +238,18 @@ errors
     ## 15 0.287        17.4       20.6
     ## 16 0.25         17.2       20.8
 
-It would be useful to compare these errors to the Bayes error, which you
-can think of as the “best-case-scenario” error. The following code
-calculates the Bayes error from `data_50`.
+It would be useful to compare these errors to the Bayes error, the error
+on the true function, which you can think of as the “best-case-scenario”
+error. The RMSE Bayes error is 20, the standard deviation of the random
+errors added by `g()`. We can check this with an approximation using
+`data_50`.
 
 ``` r
-bayes_error <- 
-  data_50 %>% 
+bayes_error <- 20
+ 
+data_50 %>% 
   summarize(bayes_error = sqrt(mean((y - f(x))^2, na.rm = TRUE))) %>% 
   pull(bayes_error)
-
-bayes_error 
 ```
 
     ## [1] 19.9741
