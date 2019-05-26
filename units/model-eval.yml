@@ -162,39 +162,27 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   \   ## <resample [180 x 2]> 1, 3, 4, 5, 6, 7, 9, 10, 11, 12, ...\n\n``` r\ntest_01
   <- df$test[[1]]\ntest_01\n```\n\n    ## <resample [21 x 2]> 2, 8, 21, 43, 53, 63,
   78, 81, 85, 101, ...\n\nEach resample object is actually a two-element list.\n\n```
-  r\nlength(train_01)\n```\n\n    ## [1] 2\n\nThe first element, `data` is the original
-  dataset.\n\n``` r\ntrain_01$data\n```\n\n    ## # A tibble: 201 x 2\n    ##        x
-  \     y\n    ##    <dbl>  <dbl>\n    ##  1   0    22.9 \n    ##  2   0.5  36.6 \n
-  \   ##  3   1    -2.32\n    ##  4   1.5  21.3 \n    ##  5   2    18.9 \n    ##  6
-  \  2.5  13.0 \n    ##  7   3   -18.3 \n    ##  8   3.5  18.5 \n    ##  9   4    29.0
-  \n    ## 10   4.5   9.73\n    ## # … with 191 more rows\n\nThe second element, `idx`,
-  is a set of indices that indicate the subset\nof the original data to use.\n\n```
-  r\ntrain_01$idx\n```\n\n    ##   [1]   1   3   4   5   6   7   9  10  11  12  13
-  \ 14  15  16  17  18  19\n    ##  [18]  20  22  23  24  25  26  27  28  29  30  31
-  \ 32  33  34  35  36  37\n    ##  [35]  38  39  40  41  42  44  45  46  47  48  49
-  \ 50  51  52  54  55  56\n    ##  [52]  57  58  59  60  61  62  64  65  66  67  68
-  \ 69  70  71  72  73  74\n    ##  [69]  75  76  77  79  80  82  83  84  86  87  88
-  \ 89  90  91  92  93  94\n    ##  [86]  95  96  97  98  99 100 102 103 104 105 106
-  107 108 109 111 112 114\n    ## [103] 115 116 117 118 119 121 122 123 124 125 126
-  127 128 130 131 132 133\n    ## [120] 134 135 136 137 138 139 140 142 143 144 145
-  147 148 150 151 153 154\n    ## [137] 155 156 157 158 159 162 163 164 165 166 167
-  168 169 170 171 172 173\n    ## [154] 174 175 176 177 178 179 180 182 183 184 185
-  186 187 188 189 190 191\n    ## [171] 192 193 194 195 196 197 198 199 200 201\n\nWe
-  can use a set operation to verify that the train and test sets are\nmutually exclusive.
-  In other words, there is no point in a given train\nset that is also in its corresponding
-  test set, and vice versa.\n\n``` r\nis_empty(intersect(train_01$idx, test_01$idx))\n```\n\n
-  \   ## [1] TRUE\n\nThe union of each train and test set is just the complete original\ndataset.
-  We can verify this by checking that the set of all train and\ntest indices contains
-  every possible index in the original dataset.\n\n``` r\nsetequal(union(train_01$idx,
-  test_01$idx),  1:201)\n```\n\n    ## [1] TRUE\n\nresample objects are not tibbles.
-  Some model functions, like `lm()`, can\ntake resample objects as input, but `loess()`
-  cannot. In order to use\n`loess()`, we’ll need to turn the resample objects into
-  tibbles.\n\n``` r\nas_tibble(test_01)\n```\n\n    ## # A tibble: 21 x 2\n    ##
-  \       x     y\n    ##    <dbl> <dbl>\n    ##  1   0.5  36.6\n    ##  2   3.5  18.5\n
-  \   ##  3  10    26.8\n    ##  4  21    79.3\n    ##  5  26    68.5\n    ##  6  31
-  \  102. \n    ##  7  38.5  76.4\n    ##  8  40    73.6\n    ##  9  42    37.1\n
-  \   ## 10  50    40.5\n    ## # … with 11 more rows\n\nResample objects waste a
-  lot of space, since each one contains the full\ndataset. A new package [rsample](https://topepo.github.io/rsample/)
+  r\nglimpse(train_01)\n```\n\n    ## List of 2\n    ##  $ data:Classes 'tbl_df',
+  'tbl' and 'data.frame':    201 obs. of  2 variables:\n    ##   ..$ x: num [1:201]
+  0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 ...\n    ##   ..$ y: num [1:201] 22.95 36.64 -2.32
+  21.26 18.88 ...\n    ##  $ idx : int [1:180] 1 3 4 5 6 7 9 10 11 12 ...\n    ##
+  \ - attr(*, \"class\")= chr \"resample\"\n\nThe first element, `data` is the original
+  dataset. The second element,\n`idx`, is a set of indices that indicate the subset
+  of the original data\nto use.\n\nWe can use a set operation to verify that the train
+  and test sets are\nmutually exclusive. In other words, there is no point in a given
+  train\nset that is also in its corresponding test set, and vice versa.\n\n``` r\nis_empty(intersect(train_01$idx,
+  test_01$idx))\n```\n\n    ## [1] TRUE\n\nThe union of each train and test set is
+  just the complete original\ndataset. We can verify this by checking that the set
+  of all train and\ntest indices contains every possible index in the original dataset.\n\n```
+  r\nsetequal(union(train_01$idx, test_01$idx),  1:201)\n```\n\n    ## [1] TRUE\n\nresample
+  objects are not tibbles. Some model functions, like `lm()`, can\ntake resample objects
+  as input, but `loess()` cannot. In order to use\n`loess()`, we’ll need to turn the
+  resample objects into tibbles.\n\n``` r\nas_tibble(test_01)\n```\n\n    ## # A tibble:
+  21 x 2\n    ##        x     y\n    ##    <dbl> <dbl>\n    ##  1   0.5  36.6\n    ##
+  \ 2   3.5  18.5\n    ##  3  10    26.8\n    ##  4  21    79.3\n    ##  5  26    68.5\n
+  \   ##  6  31   102. \n    ##  7  38.5  76.4\n    ##  8  40    73.6\n    ##  9  42
+  \   37.1\n    ## 10  50    40.5\n    ## # … with 11 more rows\n\nResample objects
+  waste a lot of space, since each one contains the full\ndataset. A new package [rsample](https://topepo.github.io/rsample/)
   is\nbeing developed to support tidy modeling in a more space-efficient way.\n\n###
   Process\n\n`crossv_kfold()` and `crossv_mc()` just generate train-test pairs. In\norder
   to carry out cross-validation, you still need to fit your model on\neach train set
@@ -206,55 +194,53 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   ~ x, data = as_tibble(train), span = span), as_tibble(test))\n}\n```\n\n**2** Create
   a function to calculate CV error\n\nNext, you need a function that iterates over
   all your train-test pairs,\ncalculates the test error for each pair, and then calculates
-  the mean\nand standard deviation of all the errors.\n\n``` r\nspan_error <- function(span,
-  data_cv) {\n  errors <- \n    data_cv %>% \n    select(-.id) %>% \n    add_column(span
-  = span) %>% \n    pmap_dbl(rmse_error)\n  \n  tibble(\n    span = span,\n    error_mean
-  = mean(errors, rm = TRUE),\n    error_sd = sd(errors, na.rm = TRUE)\n  )\n}\n```\n\n**3**
-  Create your train-test pairs\n\nUse either `crossv_mc()` or `crossv_kfold()` to
-  generate your train-test\npairs. We’ll use `crossv_mc()` to generate 100 train-test
-  pairs with\ntest sets consisting of approximately 20% of the data.\n\n``` r\nset.seed(430)\n\ndata_mc
-  <- crossv_mc(data_1, n = 100, test = 0.2)\n```\n\n**4** Calculate the CV error for
-  different values of your tuning\nparameter\n\nWe want to compare different values
-  of `span`, so we also need to\niterate over a vector of different `span` values.
-  We’ll calculate the CV\nerror for all `span`s using these train-test pairs.\n\n```
-  r\nerrors_mc <- \n  spans %>% \n  map_dfr(~ span_error(span = ., data_cv = data_mc))\n\nerrors_mc
-  %>% \n  knitr::kable()\n```\n\n|      span | error\\_mean | error\\_sd |\n| --------:
-  | ----------: | --------: |\n| 2.0000000 |    28.13057 |  2.578456 |\n| 1.7411011
-  |    27.32540 |  2.572414 |\n| 1.5157166 |    26.29811 |  2.566547 |\n| 1.3195079
-  |    25.00708 |  2.558990 |\n| 1.1486984 |    23.06875 |  2.568471 |\n| 1.0000000
-  |    21.62002 |  2.532316 |\n| 0.8705506 |    19.58527 |  2.417289 |\n| 0.7578583
-  |    18.97282 |  2.323062 |\n| 0.6597540 |    18.84846 |  2.269925 |\n| 0.5743492
-  |    18.86447 |  2.256472 |\n| 0.5000000 |    18.90930 |  2.260496 |\n| 0.4352753
-  |    18.93128 |  2.254325 |\n| 0.3789291 |    18.88556 |  2.220315 |\n| 0.3298770
-  |    18.76699 |  2.171678 |\n| 0.2871746 |    18.60700 |  2.135667 |\n| 0.2500000
-  |    18.52702 |  2.109205 |\n\n**5** Choose the best model\n\nNow, we need to compare
-  the different models and choose the best value\nof `span`.\n\nBecause we simulated
-  our data, we can compare the CV estimates of the\ntest error with the actual test
-  error.\n\n``` r\nerrors_mc %>% \n  left_join(errors, by = \"span\") %>% \n  ggplot(aes(1
-  / span)) +\n  geom_line(aes(y = test_error, color = \"test_error\")) +\n  geom_point(aes(y
-  = test_error, color = \"test_error\")) +\n  geom_line(aes(y = error_mean, color
-  = \"mc_error\")) +\n  geom_pointrange(\n    aes(\n      y = error_mean, \n      ymin
-  = error_mean - error_sd,\n      ymax = error_mean + error_sd,\n      color = \"mc_error\"\n
-  \   )\n  ) +\n  labs(\n    title = \"Cross-validation and test errors\",\n    y
-  = \"error\",\n    color = NULL\n  )\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-27-1.png)<!--
+  the mean of\nthe errors and the standard error of the mean.\n\n``` r\nspan_error
+  <- function(span, data_cv) {\n  errors <- \n    data_cv %>% \n    select(-.id) %>%
+  \n    add_column(span = span) %>% \n    pmap_dbl(rmse_error)\n  \n  tibble(\n    span
+  = span,\n    error_mean = mean(errors, rm = TRUE),\n    error_se = sd(errors, na.rm
+  = TRUE) / sqrt(length(errors))\n  )\n}\n```\n\n**3** Create your train-test pairs\n\nUse
+  either `crossv_mc()` or `crossv_kfold()` to generate your train-test\npairs. We’ll
+  use `crossv_mc()` to generate 10 train-test pairs with test\nsets consisting of
+  approximately 20% of the data.\n\n``` r\nset.seed(430)\n\ndata_mc <- crossv_mc(data_1,
+  n = 10, test = 0.2)\n```\n\n**4** Calculate the CV error for different values of
+  your tuning\nparameter\n\nWe want to compare different values of `span`, so we also
+  need to\niterate over a vector of different `span` values. We’ll calculate the CV\nerror
+  for all `span`s using these train-test pairs.\n\n``` r\nerrors_mc <- \n  spans %>%
+  \n  map_dfr(~ span_error(span = ., data_cv = data_mc))\n\nerrors_mc %>% \n  knitr::kable()\n```\n\n|
+  \     span | error\\_mean | error\\_se |\n| --------: | ----------: | --------:
+  |\n| 2.0000000 |    28.77162 | 0.4598847 |\n| 1.7411011 |    27.90898 | 0.4590082
+  |\n| 1.5157166 |    26.80809 | 0.4633976 |\n| 1.3195079 |    25.42115 | 0.4763469
+  |\n| 1.1486984 |    23.47827 | 0.5162414 |\n| 1.0000000 |    21.89512 | 0.5574787
+  |\n| 0.8705506 |    19.70633 | 0.6247474 |\n| 0.7578583 |    19.00509 | 0.6083815
+  |\n| 0.6597540 |    18.79978 | 0.5899732 |\n| 0.5743492 |    18.80655 | 0.5736369
+  |\n| 0.5000000 |    18.82917 | 0.5663217 |\n| 0.4352753 |    18.87305 | 0.5575942
+  |\n| 0.3789291 |    18.85135 | 0.5313073 |\n| 0.3298770 |    18.78642 | 0.4918808
+  |\n| 0.2871746 |    18.72327 | 0.5003602 |\n| 0.2500000 |    18.70617 | 0.5152749
+  |\n\n**5** Choose the best model\n\nNow, we need to compare the different models
+  and choose the best value\nof `span`.\n\nBecause we simulated our data, we can compare
+  the CV estimates of the\ntest error with the actual test error.\n\n``` r\nerrors_mc
+  %>% \n  left_join(errors, by = \"span\") %>% \n  ggplot(aes(1 / span)) +\n  geom_line(aes(y
+  = test_error, color = \"test_error\")) +\n  geom_point(aes(y = test_error, color
+  = \"test_error\")) +\n  geom_line(aes(y = error_mean, color = \"mc_error\")) +\n
+  \ geom_pointrange(\n    aes(\n      y = error_mean, \n      ymin = error_mean -
+  error_se,\n      ymax = error_mean + error_se,\n      color = \"mc_error\"\n    )\n
+  \ ) +\n  labs(\n    title = \"Cross-validation and test errors\",\n    y = \"error\",\n
+  \   color = NULL\n  )\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-25-1.png)<!--
   -->\n\nFrom this plot, we can see that CV error estimates from `crossv_mc()`\nunderestimate
   the true test error in the range with 1 / `span` \\>= 1.\nThe line ranges reflect
-  one standard error on either side of the mean\nerror and show considerable uncertainty
-  in the error estimates. Except\nfor the largest 1 / `span` = 4, the test error is
-  within one standard\nerror of the mean.\n\nUsually, you won’t have access to the
-  true test error, so we need a way\nto choose the best value of `span` using just
-  the CV errors. Here’s the\nrule-of-thumb for choosing a tuning parameter when you
-  only know the CV\nerrors:\n\n  - Start with the parameter that has the lowest mean
-  CV error. In this\n    case, that would be `span` = 0.25 (on the plot, `1/span`
-  = 4).\n  - Now, imagine sliding the one-standard-error range for `span` = 0.25\n
-  \   all the way to the left of the plot. Then, start sliding the range\n    to the
-  right until the first CV mean error is within its bounds. In\n    our case, the
-  top of the one-standard-error range for `span` = 0.25\n    is approximately 20.6.
-  The CV mean error for `span` = 1 is larger\n    than this, but the next most complex
-  model with `span` ≈ 0.871 is\n    smaller, so we would choose this `span`.\n\nWe
-  saw above that if we knew the test error, we would choose `span` ≈\n0.758 as the
-  optimal parameter. But we usually don’t know the test\nerror, and in this case the
-  test errors for 0.871 and 0.758 were very\nclose, with both quite close to the Bayes
-  error of 20.\n\n``` r\nerrors %>% \n  filter(span < 0.9, span > 0.7) %>% \n  select(span,
-  test_error) %>% \n  knitr::kable()\n```\n\n|      span | test\\_error |\n| --------:
-  | ----------: |\n| 0.8705506 |     20.4014 |\n| 0.7578583 |     20.1787 |\n"
+  one standard error on either side of the mean\nerror.\n\nUsually, you won’t have
+  access to the true test error, so we need a way\nto choose the best value of `span`
+  using just the CV errors. Here’s the\nrule-of-thumb for choosing a tuning parameter
+  when you only know the CV\nerrors.\n\n  - Start with the parameter that has the
+  lowest mean CV error. In this\n    case, that would be `span` = 0.25 (on the plot,
+  `1 / span` = 4) with\n    an mean CV error of approximately 18.7.\n  - Then choose
+  the simplest model whose mean CV error is within one\n    standard error of the
+  lowest value. The standard error for `span` =\n    0.25 is approximately 0.5, so
+  we are seeking the simplest model with\n    a mean CV error less than 19.2. This
+  occurs for `span` ≈ 0.758 (on\n    the plot, `1 / span` ≈ 1.32).\n\nWe saw above
+  that if we knew the test error, we would choose `span` ≈\n0.758 as the optimal parameter.
+  The one-standard-error rule of thumb\nwould lead us to choose the same optimal parameter
+  without having to\nknow the test error. The test error for this `span` is very close
+  to the\nBayes error of 20.\n\n``` r\nerrors %>% \n  top_n(-1, test_error) %>% \n
+  \ select(span, test_error) %>% \n  knitr::kable()\n```\n\n|      span | test\\_error
+  |\n| --------: | ----------: |\n| 0.7578583 |     20.1787 |\n"

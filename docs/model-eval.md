@@ -399,50 +399,19 @@ test_01
 Each resample object is actually a two-element list.
 
 ``` r
-length(train_01)
+glimpse(train_01)
 ```
 
-    ## [1] 2
+    ## List of 2
+    ##  $ data:Classes 'tbl_df', 'tbl' and 'data.frame':    201 obs. of  2 variables:
+    ##   ..$ x: num [1:201] 0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 ...
+    ##   ..$ y: num [1:201] 22.95 36.64 -2.32 21.26 18.88 ...
+    ##  $ idx : int [1:180] 1 3 4 5 6 7 9 10 11 12 ...
+    ##  - attr(*, "class")= chr "resample"
 
-The first element, `data` is the original dataset.
-
-``` r
-train_01$data
-```
-
-    ## # A tibble: 201 x 2
-    ##        x      y
-    ##    <dbl>  <dbl>
-    ##  1   0    22.9 
-    ##  2   0.5  36.6 
-    ##  3   1    -2.32
-    ##  4   1.5  21.3 
-    ##  5   2    18.9 
-    ##  6   2.5  13.0 
-    ##  7   3   -18.3 
-    ##  8   3.5  18.5 
-    ##  9   4    29.0 
-    ## 10   4.5   9.73
-    ## # … with 191 more rows
-
-The second element, `idx`, is a set of indices that indicate the subset
-of the original data to use.
-
-``` r
-train_01$idx
-```
-
-    ##   [1]   1   3   4   5   6   7   9  10  11  12  13  14  15  16  17  18  19
-    ##  [18]  20  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37
-    ##  [35]  38  39  40  41  42  44  45  46  47  48  49  50  51  52  54  55  56
-    ##  [52]  57  58  59  60  61  62  64  65  66  67  68  69  70  71  72  73  74
-    ##  [69]  75  76  77  79  80  82  83  84  86  87  88  89  90  91  92  93  94
-    ##  [86]  95  96  97  98  99 100 102 103 104 105 106 107 108 109 111 112 114
-    ## [103] 115 116 117 118 119 121 122 123 124 125 126 127 128 130 131 132 133
-    ## [120] 134 135 136 137 138 139 140 142 143 144 145 147 148 150 151 153 154
-    ## [137] 155 156 157 158 159 162 163 164 165 166 167 168 169 170 171 172 173
-    ## [154] 174 175 176 177 178 179 180 182 183 184 185 186 187 188 189 190 191
-    ## [171] 192 193 194 195 196 197 198 199 200 201
+The first element, `data` is the original dataset. The second element,
+`idx`, is a set of indices that indicate the subset of the original data
+to use.
 
 We can use a set operation to verify that the train and test sets are
 mutually exclusive. In other words, there is no point in a given train
@@ -513,8 +482,8 @@ rmse_error <- function(span, train, test) {
 **2** Create a function to calculate CV error
 
 Next, you need a function that iterates over all your train-test pairs,
-calculates the test error for each pair, and then calculates the mean
-and standard deviation of all the errors.
+calculates the test error for each pair, and then calculates the mean of
+the errors and the standard error of the mean.
 
 ``` r
 span_error <- function(span, data_cv) {
@@ -527,7 +496,7 @@ span_error <- function(span, data_cv) {
   tibble(
     span = span,
     error_mean = mean(errors, rm = TRUE),
-    error_sd = sd(errors, na.rm = TRUE)
+    error_se = sd(errors, na.rm = TRUE) / sqrt(length(errors))
   )
 }
 ```
@@ -535,13 +504,13 @@ span_error <- function(span, data_cv) {
 **3** Create your train-test pairs
 
 Use either `crossv_mc()` or `crossv_kfold()` to generate your train-test
-pairs. We’ll use `crossv_mc()` to generate 100 train-test pairs with
-test sets consisting of approximately 20% of the data.
+pairs. We’ll use `crossv_mc()` to generate 10 train-test pairs with test
+sets consisting of approximately 20% of the data.
 
 ``` r
 set.seed(430)
 
-data_mc <- crossv_mc(data_1, n = 100, test = 0.2)
+data_mc <- crossv_mc(data_1, n = 10, test = 0.2)
 ```
 
 **4** Calculate the CV error for different values of your tuning
@@ -560,24 +529,24 @@ errors_mc %>%
   knitr::kable()
 ```
 
-|      span | error\_mean | error\_sd |
+|      span | error\_mean | error\_se |
 | --------: | ----------: | --------: |
-| 2.0000000 |    28.13057 |  2.578456 |
-| 1.7411011 |    27.32540 |  2.572414 |
-| 1.5157166 |    26.29811 |  2.566547 |
-| 1.3195079 |    25.00708 |  2.558990 |
-| 1.1486984 |    23.06875 |  2.568471 |
-| 1.0000000 |    21.62002 |  2.532316 |
-| 0.8705506 |    19.58527 |  2.417289 |
-| 0.7578583 |    18.97282 |  2.323062 |
-| 0.6597540 |    18.84846 |  2.269925 |
-| 0.5743492 |    18.86447 |  2.256472 |
-| 0.5000000 |    18.90930 |  2.260496 |
-| 0.4352753 |    18.93128 |  2.254325 |
-| 0.3789291 |    18.88556 |  2.220315 |
-| 0.3298770 |    18.76699 |  2.171678 |
-| 0.2871746 |    18.60700 |  2.135667 |
-| 0.2500000 |    18.52702 |  2.109205 |
+| 2.0000000 |    28.77162 | 0.4598847 |
+| 1.7411011 |    27.90898 | 0.4590082 |
+| 1.5157166 |    26.80809 | 0.4633976 |
+| 1.3195079 |    25.42115 | 0.4763469 |
+| 1.1486984 |    23.47827 | 0.5162414 |
+| 1.0000000 |    21.89512 | 0.5574787 |
+| 0.8705506 |    19.70633 | 0.6247474 |
+| 0.7578583 |    19.00509 | 0.6083815 |
+| 0.6597540 |    18.79978 | 0.5899732 |
+| 0.5743492 |    18.80655 | 0.5736369 |
+| 0.5000000 |    18.82917 | 0.5663217 |
+| 0.4352753 |    18.87305 | 0.5575942 |
+| 0.3789291 |    18.85135 | 0.5313073 |
+| 0.3298770 |    18.78642 | 0.4918808 |
+| 0.2871746 |    18.72327 | 0.5003602 |
+| 0.2500000 |    18.70617 | 0.5152749 |
 
 **5** Choose the best model
 
@@ -597,8 +566,8 @@ errors_mc %>%
   geom_pointrange(
     aes(
       y = error_mean, 
-      ymin = error_mean - error_sd,
-      ymax = error_mean + error_sd,
+      ymin = error_mean - error_se,
+      ymax = error_mean + error_se,
       color = "mc_error"
     )
   ) +
@@ -609,44 +578,41 @@ errors_mc %>%
   )
 ```
 
-![](model-eval_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](model-eval_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 From this plot, we can see that CV error estimates from `crossv_mc()`
 underestimate the true test error in the range with 1 / `span` \>= 1.
 The line ranges reflect one standard error on either side of the mean
-error and show considerable uncertainty in the error estimates. Except
-for the largest 1 / `span` = 4, the test error is within one standard
-error of the mean.
+error.
 
 Usually, you won’t have access to the true test error, so we need a way
 to choose the best value of `span` using just the CV errors. Here’s the
 rule-of-thumb for choosing a tuning parameter when you only know the CV
-errors:
+errors.
 
   - Start with the parameter that has the lowest mean CV error. In this
-    case, that would be `span` = 0.25 (on the plot, `1/span` = 4).
-  - Now, imagine sliding the one-standard-error range for `span` = 0.25
-    all the way to the left of the plot. Then, start sliding the range
-    to the right until the first CV mean error is within its bounds. In
-    our case, the top of the one-standard-error range for `span` = 0.25
-    is approximately 20.6. The CV mean error for `span` = 1 is larger
-    than this, but the next most complex model with `span` ≈ 0.871 is
-    smaller, so we would choose this `span`.
+    case, that would be `span` = 0.25 (on the plot, `1 / span` = 4) with
+    an mean CV error of approximately 18.7.
+  - Then choose the simplest model whose mean CV error is within one
+    standard error of the lowest value. The standard error for `span` =
+    0.25 is approximately 0.5, so we are seeking the simplest model with
+    a mean CV error less than 19.2. This occurs for `span` ≈ 0.758 (on
+    the plot, `1 / span` ≈ 1.32).
 
 We saw above that if we knew the test error, we would choose `span` ≈
-0.758 as the optimal parameter. But we usually don’t know the test
-error, and in this case the test errors for 0.871 and 0.758 were very
-close, with both quite close to the Bayes error of 20.
+0.758 as the optimal parameter. The one-standard-error rule of thumb
+would lead us to choose the same optimal parameter without having to
+know the test error. The test error for this `span` is very close to the
+Bayes error of 20.
 
 ``` r
 errors %>% 
-  filter(span < 0.9, span > 0.7) %>% 
+  top_n(-1, test_error) %>% 
   select(span, test_error) %>% 
   knitr::kable()
 ```
 
 |      span | test\_error |
 | --------: | ----------: |
-| 0.8705506 |     20.4014 |
 | 0.7578583 |     20.1787 |
 
