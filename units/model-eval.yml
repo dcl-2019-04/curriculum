@@ -227,20 +227,20 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   \ ) +\n  labs(\n    title = \"Cross-validation and test errors\",\n    y = \"error\",\n
   \   color = NULL\n  )\n```\n\n![](model-eval_files/figure-gfm/unnamed-chunk-25-1.png)<!--
   -->\n\nFrom this plot, we can see that CV error estimates from `crossv_mc()`\nunderestimate
-  the true test error in the range with 1 / `span` \\>= 1.\nThe line ranges reflect
-  one standard error on either side of the mean\nerror.\n\nUsually, you won’t have
-  access to the true test error, so we need a way\nto choose the best value of `span`
-  using just the CV errors. Here’s the\nrule-of-thumb for choosing a tuning parameter
-  when you only know the CV\nerrors.\n\n  - Start with the parameter that has the
-  lowest mean CV error. In this\n    case, that would be `span` = 0.25 (on the plot,
-  `1 / span` = 4) with\n    an mean CV error of approximately 18.7.\n  - Then choose
-  the simplest model whose mean CV error is within one\n    standard error of the
-  lowest value. The standard error for `span` =\n    0.25 is approximately 0.5, so
-  we are seeking the simplest model with\n    a mean CV error less than 19.2. This
-  occurs for `span` ≈ 0.758 (on\n    the plot, `1 / span` ≈ 1.32).\n\nWe saw above
-  that if we knew the test error, we would choose `span` ≈\n0.758 as the optimal parameter.
-  The one-standard-error rule of thumb\nwould lead us to choose the same optimal parameter
-  without having to\nknow the test error. The test error for this `span` is very close
-  to the\nBayes error of 20.\n\n``` r\nerrors %>% \n  top_n(-1, test_error) %>% \n
-  \ select(span, test_error) %>% \n  knitr::kable()\n```\n\n|      span | test\\_error
-  |\n| --------: | ----------: |\n| 0.7578583 |     20.1787 |\n"
+  the true test error in the range with `1/span` \\> 1. The\nline ranges reflect one
+  standard error on either side of the mean error.\n\nUsually, you won’t have access
+  to the true test error, so we need a way\nto choose the best value of `span` using
+  just the CV errors. Here’s the\nrule-of-thumb for choosing a tuning parameter when
+  you only know the CV\nerrors.\n\n  - Start with the parameter that has the lowest
+  mean CV error. In this\n    case, that would be `span` = 0.25 (on the plot, `1/span`
+  = 4) with\n    an mean CV error of approximately 18.7.\n  - Then choose the simplest
+  model whose mean CV error is within one\n    standard error of the lowest value.
+  The standard error for `span` =\n    0.25 is approximately 0.5, so we are seeking
+  the simplest model with\n    a mean CV error less than 19.2. This occurs for `span`
+  ≈ 0.758 (on\n    the plot, `1/span` ≈ 1.32).\n\nWe saw above that if we knew the
+  test error, we would choose `span` ≈\n0.758 as the optimal parameter. The one-standard-error
+  rule of thumb\nwould lead us to choose the same optimal parameter without having
+  to\nknow the test error. The test error for this `span` is very close to the\nBayes
+  error of 20.\n\n``` r\nerrors %>% \n  top_n(-1, test_error) %>% \n  select(span,
+  test_error) %>% \n  knitr::kable()\n```\n\n|      span | test\\_error |\n| --------:
+  | ----------: |\n| 0.7578583 |     20.1787 |\n"

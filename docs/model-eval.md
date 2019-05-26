@@ -581,9 +581,8 @@ errors_mc %>%
 ![](model-eval_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 From this plot, we can see that CV error estimates from `crossv_mc()`
-underestimate the true test error in the range with 1 / `span` \>= 1.
-The line ranges reflect one standard error on either side of the mean
-error.
+underestimate the true test error in the range with `1/span` \> 1. The
+line ranges reflect one standard error on either side of the mean error.
 
 Usually, you won’t have access to the true test error, so we need a way
 to choose the best value of `span` using just the CV errors. Here’s the
@@ -591,13 +590,13 @@ rule-of-thumb for choosing a tuning parameter when you only know the CV
 errors.
 
   - Start with the parameter that has the lowest mean CV error. In this
-    case, that would be `span` = 0.25 (on the plot, `1 / span` = 4) with
+    case, that would be `span` = 0.25 (on the plot, `1/span` = 4) with
     an mean CV error of approximately 18.7.
   - Then choose the simplest model whose mean CV error is within one
     standard error of the lowest value. The standard error for `span` =
     0.25 is approximately 0.5, so we are seeking the simplest model with
     a mean CV error less than 19.2. This occurs for `span` ≈ 0.758 (on
-    the plot, `1 / span` ≈ 1.32).
+    the plot, `1/span` ≈ 1.32).
 
 We saw above that if we knew the test error, we would choose `span` ≈
 0.758 as the optimal parameter. The one-standard-error rule of thumb
