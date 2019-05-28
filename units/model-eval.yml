@@ -130,7 +130,7 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   to create a more robust estimate of the true test\nerror.\n\nmodelr provides two
   functions for generating these train-test pairs:\n`crossv_mc()` and `crossv_kfold()`.
   We’ll introduce these functions in\nthe next section.\n\n### Generating train-test
-  paires with `crossv_mc()` and `crossv_kfold()`\n\n`crossv_mc()` and `crossv_kfold()`
+  pairs with `crossv_mc()` and `crossv_kfold()`\n\n`crossv_mc()` and `crossv_kfold()`
   both take your original data as input\nand produce a tibble that looks like this:\n\n```
   r\ndata_1 %>% \n  crossv_kfold()\n```\n\n    ## # A tibble: 5 x 3\n    ##   train
   \         test           .id  \n    ##   <list>         <list>         <chr>\n    ##
@@ -199,16 +199,16 @@ desc: "\n``` r\nlibrary(tidyverse)\nlibrary(modelr)\n```\n\nA crucial part of th
   the mean of\nthe errors and the standard error of the mean.\n\n``` r\nspan_error
   <- function(span, data_cv) {\n  errors <- \n    data_cv %>% \n    select(-.id) %>%
   \n    add_column(span = span) %>% \n    pmap_dbl(rmse_error)\n  \n  tibble(\n    span
-  = span,\n    error_mean = mean(errors, rm = TRUE),\n    error_se = sd(errors, na.rm
-  = TRUE) / sqrt(length(errors))\n  )\n}\n```\n\n**3** Create your train-test pairs\n\nUse
-  either `crossv_mc()` or `crossv_kfold()` to generate your train-test\npairs. We’ll
-  use `crossv_mc()` to generate 10 train-test pairs with test\nsets consisting of
-  approximately 20% of the data.\n\n``` r\nset.seed(430)\n\ndata_mc <- crossv_mc(data_1,
+  = span,\n    error_mean = mean(errors, na.rm = TRUE),\n    error_se = sd(errors,
+  na.rm = TRUE) / sqrt(length(errors))\n  )\n}\n```\n\n**3** Create your train-test
+  pairs\n\nUse either `crossv_mc()` or `crossv_kfold()` to generate your train-test\npairs.
+  We’ll use `crossv_mc()` to generate 10 train-test pairs with test\nsets consisting
+  of approximately 20% of the data.\n\n``` r\nset.seed(430)\n\ndata_mc <- crossv_mc(data_1,
   n = 10, test = 0.2)\n```\n\n**4** Calculate the CV error for different values of
   your tuning\nparameter\n\nWe want to compare different values of `span`, so we also
   need to\niterate over a vector of different `span` values. We’ll calculate the CV\nerror
   for all `span`s using these train-test pairs.\n\n``` r\nerrors_mc <- \n  spans %>%
-  \n  map_dfr(~ span_error(span = ., data_cv = data_mc))\n\nerrors_mc %>% \n  knitr::kable()\n```\n\n|
+  \n  map_dfr(span_error, data_cv = data_mc)\n\nerrors_mc %>% \n  knitr::kable()\n```\n\n|
   \     span | error\\_mean | error\\_se |\n| --------: | ----------: | --------:
   |\n| 2.0000000 |    28.77162 | 0.4598847 |\n| 1.7411011 |    27.90898 | 0.4590082
   |\n| 1.5157166 |    26.80809 | 0.4633976 |\n| 1.3195079 |    25.42115 | 0.4763469

@@ -312,7 +312,7 @@ modelr provides two functions for generating these train-test pairs:
 `crossv_mc()` and `crossv_kfold()`. We’ll introduce these functions in
 the next section.
 
-### Generating train-test paires with `crossv_mc()` and `crossv_kfold()`
+### Generating train-test pairs with `crossv_mc()` and `crossv_kfold()`
 
 `crossv_mc()` and `crossv_kfold()` both take your original data as input
 and produce a tibble that looks like this:
@@ -496,7 +496,7 @@ span_error <- function(span, data_cv) {
   
   tibble(
     span = span,
-    error_mean = mean(errors, rm = TRUE),
+    error_mean = mean(errors, na.rm = TRUE),
     error_se = sd(errors, na.rm = TRUE) / sqrt(length(errors))
   )
 }
@@ -524,7 +524,7 @@ error for all `span`s using these train-test pairs.
 ``` r
 errors_mc <- 
   spans %>% 
-  map_dfr(~ span_error(span = ., data_cv = data_mc))
+  map_dfr(span_error, data_cv = data_mc)
 
 errors_mc %>% 
   knitr::kable()
