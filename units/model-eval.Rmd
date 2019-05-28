@@ -302,7 +302,7 @@ span_error <- function(span, data_cv) {
   
   tibble(
     span = span,
-    error_mean = mean(errors, rm = TRUE),
+    error_mean = mean(errors, na.rm = TRUE),
     error_se = sd(errors, na.rm = TRUE) / sqrt(length(errors))
   )
 }
