@@ -1,4 +1,4 @@
-cur-week: 09
+cur-week: 10
 
 weeks:
   week-01:
@@ -70,9 +70,9 @@ weeks:
   - purrr-extras
 
   week-10:
-  - rmarkdown-formats
   - workflow-rmarkdown
+  - rmarkdown-formats
+  - googlesheets
   - ggplot2-exts
   - dplyr-databases
-  - googlesheets
   - learning-more
