@@ -11,12 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Use the googlesheets package by Jenny Bryan to (suprise!) extract data from Google sheets. Google sheets are a surprisingly useful way of collecting data (especially with Google forms) and collaboratively working with data. googlesheets makes it easy to get that data into R and make use of it.
 
-If you haven't already, install it:
-
-```{r, eval = FALSE}
-install.packages("googlesheets")
-```
-
 ```{r setup, message=FALSE, warning=FALSE}
 # Libraries
 library(tidyverse)
