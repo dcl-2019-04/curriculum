@@ -325,7 +325,7 @@ We want to compare different values of `span`, so we also need to iterate over a
 ```{r}
 errors_mc <- 
   spans %>% 
-  map_dfr(~ span_error(span = ., data_cv = data_mc))
+  map_dfr(span_error, data_cv = data_mc)
 
 errors_mc %>% 
   knitr::kable()
