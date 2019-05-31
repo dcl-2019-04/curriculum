@@ -3,54 +3,62 @@ theme: wrangle
 needs: parse-basics
 readings: ~
 updated: ~
-desc: "\nUse the googlesheets package by Jenny Bryan to (suprise\\!) extract data\nfrom
-  Google sheets. Google sheets are a surprisingly useful way of\ncollecting data (especially
-  with Google forms) and collaboratively\nworking with data. googlesheets makes it
-  easy to get that data into R\nand make use of it.\n\n``` r\n# Libraries\nlibrary(tidyverse)\nlibrary(googlesheets)\n\n#
-  Parameters\n  # URL for Gapminder example\nurl_gapminder <- \"https://docs.google.com/spreadsheets/d/1BzfL0kZUz1TsI5zxJF1WNF01IxvC67FbOJUiiGMZ_mQ/\"\n```\n\n##
-  Public sheets\n\nSome Google sheets are public, anyone can read them. Take a look
-  at this\n[example](https://docs.google.com/spreadsheets/d/1BzfL0kZUz1TsI5zxJF1WNF01IxvC67FbOJUiiGMZ_mQ/)\nof
+desc: "\n``` r\n# Libraries\nlibrary(tidyverse)\nlibrary(googlesheets)\n\n# Parameters\n
+  \ # URL for Gapminder example\nurl_gapminder <- \"https://docs.google.com/spreadsheets/d/1BzfL0kZUz1TsI5zxJF1WNF01IxvC67FbOJUiiGMZ_mQ/\"\n```\n\nIn
+  this reading, we’ll show you how to use the googlesheets package by\nJenny Bryan
+  to (surprise\\!) extract data from Google sheets. Google\nsheets are a surprisingly
+  useful way to collect and collaboratively work\nwith data, and the googlesheets
+  package makes it easy to pull that data\ninto R. One useful workflow involves using
+  Google forms to collect form\ndata into a Google sheet, and then using the googlesheets
+  package to\nextract and analyze that data in R.\n\n## Public sheets\n\nSome Google
+  sheets are public, which means that anyone can read them.\nTake a look at this\n[example](https://docs.google.com/spreadsheets/d/1BzfL0kZUz1TsI5zxJF1WNF01IxvC67FbOJUiiGMZ_mQ/)\nof
   data from [Gapminder](https://www.gapminder.org/).\n\nEach Google sheet has a sheet
-  key, which is needed by googlesheets.\nHere’s how to get the sheet key from a sheet’s
-  URL.\n\n``` r\nsheet_key <- extract_key_from_url(url_gapminder)\n\nsheet_key\n```\n\n
+  key. You’ll need this key to load a sheet\nwith googlesheets. Here’s how to get
+  the sheet key from a sheet’s URL.\n\n``` r\nsheet_key <- extract_key_from_url(url_gapminder)\n\nsheet_key\n```\n\n
   \   ## [1] \"1BzfL0kZUz1TsI5zxJF1WNF01IxvC67FbOJUiiGMZ_mQ\"\n\nOnce you have the
   sheet key, you can use it to create a googlesheets\nobject.\n\n``` r\ngs <- gs_key(sheet_key)\n\nclass(gs)\n```\n\n
-  \   ## [1] \"googlesheet\" \"list\"\n\nHere’s how you can list the worksheets in
-  the Google sheet.\n\n``` r\ngs_ws_ls(gs)\n```\n\n    ## [1] \"Africa\"   \"Americas\"
-  \"Asia\"     \"Europe\"   \"Oceania\"\n\nHere’s how you can read in the Asia worksheet.\n\n```
-  r\nasia <- \n  gs %>% \n  gs_read(ws = \"Asia\")\n```\n\n    ## Accessing worksheet
-  titled 'Asia'.\n\n    ## Parsed with column specification:\n    ## cols(\n    ##
-  \  country = col_character(),\n    ##   continent = col_character(),\n    ##   year
-  = col_double(),\n    ##   lifeExp = col_double(),\n    ##   pop = col_double(),\n
-  \   ##   gdpPercap = col_double()\n    ## )\n\n``` r\nasia\n```\n\n    ## # A tibble:
-  396 x 6\n    ##    country     continent  year lifeExp      pop gdpPercap\n    ##
-  \   <chr>       <chr>     <dbl>   <dbl>    <dbl>     <dbl>\n    ##  1 Afghanistan
-  Asia       1952    28.8  8425333      779.\n    ##  2 Afghanistan Asia       1957
-  \   30.3  9240934      821.\n    ##  3 Afghanistan Asia       1962    32.0 10267083
-  \     853.\n    ##  4 Afghanistan Asia       1967    34.0 11537966      836.\n    ##
-  \ 5 Afghanistan Asia       1972    36.1 13079460      740.\n    ##  6 Afghanistan
-  Asia       1977    38.4 14880372      786.\n    ##  7 Afghanistan Asia       1982
-  \   39.9 12881816      978.\n    ##  8 Afghanistan Asia       1987    40.8 13867957
-  \     852.\n    ##  9 Afghanistan Asia       1992    41.7 16317921      649.\n    ##
-  10 Afghanistan Asia       1997    41.8 22227415      635.\n    ## # … with 386 more
-  rows\n\n## Private sheets\n\nAccessing private sheets requires you to authenticate
-  to Google.\nAuthentication is done with this command.\n\n``` r\n# Give googlesheets
-  permission to access spreadsheet\ngs_auth()\n```\n\nYou will be prompted to log
-  into Google. Once you have done this,\ngooglesheets will create a file called `.httr-oauth`
-  in your current\ndirectory. **NEVER CHECK THIS INTO GIT OR UPLOAD IT TO GITHUB**.\n(RStudio
-  should create a `.gitignore` file to prevent `.httr-oauth` from\nbeing checked into
-  Git or uploaded to GitHub.)\n\nThe `.httr-oauth` file allows you to avoid having
-  to log into Google in\nthe future. The reason you don’t upload this to GitHub is
-  that if\nsomeone were able to obtain this file, they could use it to access your\nGoogle
-  files.\n\nA common problem in using googlesheets is that it cannot find the\n`.httr-oauth`
-  file. If you are using an RStudio project, your working\ndirectory is often the
-  top level of the project, not the current\nsubfolder. One way to avoid this problem
-  is to simply make a copy of\n`.httr-oauth` to have one at both the top level of
-  the project and the\nsubfolder.\n\nOnce you are authenticated into Google, your
-  next challenge is to find\nthe sheet key for the Google sheet you are interested
-  in using. You can\nuse the following so see the sheets you have access to. The list
-  is\nordered by modification time, with the most recently modified sheets\nfirst.\n\n```
-  r\ngs_ls() %>% View()\n```\n\nOnce you find the sheet you are interested in, you
-  can copy its sheet\nkey can create a variable for the it to place in the parameter
-  section\nof your code.\n\nFinally, you can read in the sheet using\n\n``` r\ndf
-  <- \n  gs_key(sheet_key) %>%\n  gs_read()\n```\n"
+  \   ## [1] \"googlesheet\" \"list\"\n\nYou can also list all the worksheets in a
+  single Google sheet with\n`gs_ws_ls()`.\n\n``` r\ngs_ws_ls(gs)\n```\n\n    ## [1]
+  \"Africa\"   \"Americas\" \"Asia\"     \"Europe\"   \"Oceania\"\n\nTo read in a
+  worksheet, use `gs_read()`. `gs_read()` takes a\ngooglesheets object and, optionally,
+  the name of a specific worksheet.\n\n``` r\nasia <- \n  gs %>% \n  gs_read(ws =
+  \"Asia\")\n```\n\n    ## Accessing worksheet titled 'Asia'.\n\n    ## Parsed with
+  column specification:\n    ## cols(\n    ##   country = col_character(),\n    ##
+  \  continent = col_character(),\n    ##   year = col_double(),\n    ##   lifeExp
+  = col_double(),\n    ##   pop = col_double(),\n    ##   gdpPercap = col_double()\n
+  \   ## )\n\n``` r\nasia\n```\n\n    ## # A tibble: 396 x 6\n    ##    country     continent
+  \ year lifeExp      pop gdpPercap\n    ##    <chr>       <chr>     <dbl>   <dbl>
+  \   <dbl>     <dbl>\n    ##  1 Afghanistan Asia       1952    28.8  8425333      779.\n
+  \   ##  2 Afghanistan Asia       1957    30.3  9240934      821.\n    ##  3 Afghanistan
+  Asia       1962    32.0 10267083      853.\n    ##  4 Afghanistan Asia       1967
+  \   34.0 11537966      836.\n    ##  5 Afghanistan Asia       1972    36.1 13079460
+  \     740.\n    ##  6 Afghanistan Asia       1977    38.4 14880372      786.\n    ##
+  \ 7 Afghanistan Asia       1982    39.9 12881816      978.\n    ##  8 Afghanistan
+  Asia       1987    40.8 13867957      852.\n    ##  9 Afghanistan Asia       1992
+  \   41.7 16317921      649.\n    ## 10 Afghanistan Asia       1997    41.8 22227415
+  \     635.\n    ## # … with 386 more rows\n\n## Private sheets\n\nAccessing private
+  sheets requires you to authenticate to Google.\nAuthentication is done with this
+  command.\n\n``` r\n# Give googlesheets permission to access spreadsheet\ngs_auth()\n```\n\nA
+  page will open in your browser and you’ll be prompted to log into\nGoogle. Once
+  you’ve logged in, googlesheets will create a file called\n`.httr-oauth` in your
+  current directory. **NEVER CHECK THIS INTO GIT OR\nUPLOAD IT TO GITHUB**. To ensure
+  that you don’t actually push your\n`.httr-oauth`, `gs_auth()` will add `.httr-oauth`
+  to the `.gitignore`\nfile in your current directory.\n\nThe `.httr-oauth` file allows
+  you to avoid logging into Google in the\nfuture. You don’t upload this file to GitHub
+  because if someone else had\nit, they could use it to access your Google files.\n\nA
+  common error you’ll encounter involves a googlesheets function being\nunable find
+  the `.httr-oauth` file. If you’re using an RStudio project,\nyour working directory
+  is usually the top level of the project, and so\n`gs_auth()` will put `.httr-oauth`
+  in the top-level of the directory.\nHowever, you’ll often be working with an R Markdown
+  document or R script\nlocated in a subfolder, and so the googlesheets function will
+  look for\n`.httr-oauth` in that subfolder. To avoid this problem, you can copy\n`.httr-oauth`
+  over to your subfolder, so that you have one `.httr-oauth`\nthe top level of the
+  project and one in your subfolder.\n\nOnce authenticated into Google, you now need
+  to find the sheet key for\nthe relevant Google sheet. Like we did earlier, you can
+  find the sheet’s\nURl and then call `extract_key_from_url()` like we did earlier.\n\nWith
+  private sheets, another option is to use `gs_ls()` to see all the\nsheets to which
+  you have access. `gs_ls()` orders by modification time,\nwith the most recently
+  modified sheets first.\n\n``` r\ngs_ls() %>% view()\n```\n\nLocate the relevant
+  sheet and copy its sheet key. Create a variable for\nthe key in your parameters
+  (e.g., `sheet_key <- \"XdkfjOkdjk\"`), and then\nread in the sheet using\n\n```
+  r\ndf <- \n  gs_key(sheet_key) %>%\n  gs_read()\n```\n"
