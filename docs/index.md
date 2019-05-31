@@ -367,22 +367,5 @@ title: Theme index
   <td colspan="6"><a class="wrangle" href="googlesheets.html">Google sheets</a></td>
   <td colspan="5"></td>
 </tr>
-<tr>
-<td></td>
-  <td colspan="2"></td>
-  <td colspan="6"><a class="visualize" href="ggplot2-exts.html">ggplot2 extensions</a></td>
-  <td colspan="4"></td>
-</tr>
-<tr>
-<td></td>
-  <td colspan="1"></td>
-  <td colspan="6"><a class="wrangle" href="dplyr-databases.html">dplyr and databases</a></td>
-  <td colspan="5"></td>
-</tr>
-<tr>
-<td></td>
-  <td colspan="6"></td>
-  <td colspan="6"><a class="workflow" href="learning-more.html">Learning more</a></td>
-</tr>
 </tbody>
 </table>
