@@ -73,6 +73,6 @@ weeks:
   - workflow-rmarkdown
   - rmarkdown-formats
   - googlesheets
-#  - ggplot2-exts
-#  - dplyr-databases
-#  - learning-more
+  - ggplot2-exts
+  - dplyr-databases
+  - learning-more
