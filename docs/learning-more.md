@@ -25,3 +25,5 @@ build up a regular practice of
 
     * [tidyverse.org blog](https://www.tidyverse.org/articles/): articles and
       descriptions of new packages releases.
+      
+*[Hadley Wickham's Twitter feed](https://twitter.com/hadleywickham)
