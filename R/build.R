@@ -84,13 +84,21 @@ build_storyboard <- function() {
   )
 }
 
-
+theme_colors <- c(
+  Explore     = "#F8766D",
+  Wrangle     = "#C49A00",
+  Visualize   = "#53B400",
+  Model       = "#00C094",
+  Program     = "#00B6EB",
+  Communicate = "#A58AFF",
+  Workflow    = "#FB61D7"
+)
 build_overview <- function() {
   raw_units <- load_units()
   units <- tibble(
     name = raw_units %>% names(),
     label = gsub("-", "\n", name),
-    theme = raw_units %>% map_chr("theme"),
+    theme = raw_units %>% map_chr("theme") %>% str_to_title(),
     needs = raw_units %>% map("needs")
   )
 
@@ -112,9 +120,9 @@ build_overview <- function() {
       arrow = arrow(length = unit(2, "mm"))
     ) +
     geom_node_label(aes(label = label, fill = theme), size = 3) +
-    scale_y_reverse() +
+    scale_fill_manual(values = theme_colors, breaks = names(theme_colors)) +
     theme_void() +
-    scale_fill_brewer(palette = "Set2")
+    labs(fill = "Theme")
 
   writing("overview.png")
   ggsave(here::here("overview.png"), width = 12, height = 8, dpi = 96)
