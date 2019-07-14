@@ -1,6 +1,6 @@
 # Data Challenge Lab
 
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc/4.0/)
+[![Creative Commons License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 This repository contains the draft curriculum for the Stanford [Data Challenge Lab](https://datalab.stanford.edu/challenge-lab).
 
